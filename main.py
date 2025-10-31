@@ -6,15 +6,16 @@ from dotenv import load_dotenv
 from google import genai
 import json
 
-from fastapi import FastAPI
-from pydantic import BaseModel
-import requests
-import os
-from dotenv import load_dotenv
-from google import genai
-
 # === ENVIRONMENT VARIABLES ===
 load_dotenv()
+
+CACHE = "CACHE_STREAMS.json"
+
+if os.path.exists(CACHE):
+    with open(CACHE, "r") as f:
+        STREAMS_CACHE = json.load(f)
+
+
 GEMINI_KEY = os.getenv("GEMINI_API_KEY")
 TMDB_API_KEY = os.getenv("TMDB_API_KEY")
 READ_ACCESS = os.getenv("READ_ACCESS")
@@ -36,7 +37,7 @@ class QueryRequest(BaseModel):
 # === GEMINI PARSING (plain text parsing) ===
 def extract_title_gemini_plain(user_input: str, category: str):
     prompt = f"""
-    You are a title extractor for a streaming assistant. 
+    You are a movie/tv/ title extractor, you are also a sports expert and can extract team names for a streaming assistant. 
     The category is "{category}". 
     Extract only the title and any season/episode numbers if relevant.
     Respond in plain text format (no JSON!):
@@ -111,8 +112,36 @@ def build_vidking_embed(parsed, category: str):
 
 # === SPORTS LOOKUP ===
 def get_sport_stream(title: str):
-    pass
+    for name, url in STREAMS_CACHE.items():
+        if title.lower() in name.lower():
+            return url
+    return None
 
+@app.get("/streams")
+def store_streams():
+    try:
+        res = requests.get(PPV_API)
+        res.raise_for_status()
+        data = res.json()
+
+        streams = {}
+        #first loop splits football basketball soccer
+        #second loop gets individual streams
+        for cat in data.get("streams", []):
+            for stream in cat.get("streams", []):
+                name = stream.get("name", "").strip()
+                uri = stream.get("uri_name")
+                iframe = stream.get("iframe")
+
+                # Prefer iframe, fall back to embed link
+                url = iframe or f"https://ppv.to/embed/{uri}"
+
+                if name and url:
+                    streams[name] = url
+        with open("CACHE_STREAMS.json", "w") as f:
+            json.dump(streams, f, indent=2)
+    except Exception as e:
+        print("Failed to get streams", e)
 
 # === MAIN ROUTE ===
 @app.post("/watch")
