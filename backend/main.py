@@ -17,14 +17,14 @@ if os.path.exists(CACHE):
     with open(CACHE, "r") as f:
         STREAMS_CACHE = json.load(f)
 origins = ["https://localhost",
-           "https://localhost:8000", "http://localhost:3000", "http://127.0.0.1:3000"]
+           "https://localhost:8000", "http://localhost:5173", "http://127.0.0.1:3000"]
 app = FastAPI()
 #frontend sends a preflight security check OPTIONS request need to 
 app.add_middleware(
     CORSMiddleware,
     allow_origins= origins,  # Added Vite default port
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
@@ -33,8 +33,6 @@ TMDB_API_KEY = os.getenv("TMDB_API_KEY")
 READ_ACCESS = os.getenv("READ_ACCESS")
 
 gem_client = genai.Client(api_key=GEMINI_KEY)
-
-app = FastAPI(title="AI Streaming Agent")
 
 VIDKING_BASE = "https://www.vidking.net/embed"
 PPV_API = "https://ppv.to/api/streams"
