@@ -6,27 +6,20 @@ function App() {
     <div className="app-container">
       <header className="website-header">
         <div className="header-content">
-          <h1>Agent Smark</h1>
-          <nav>
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#contact">Contact</a>
-          </nav>
+          <h1>AGENT LNKR</h1>
+          
         </div>
       </header>
 
       <main className="website-main">
         <section className="hero">
-          <h2>Search Sports, TV, & Movies</h2>
-          <p>Ask anything and get a stream</p>
+          <h2>Search Sports, TV, & Movies for Streams</h2>
+          <p>Select a category and search away!</p>
         </section>
 
         <QueryPopup />
 
-        <section className="content-section">
-          <h3>Featured</h3>
-          <p>Use the search above to find a stream for your favorite sports, TV shows, and movies.</p>
-        </section>
+
       </main>
 
       

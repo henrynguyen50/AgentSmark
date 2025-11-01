@@ -96,13 +96,16 @@
 .category-chip {
   padding: 6px 14px;
   border-radius: 20px;
-  border: 1px solid #404040;
+  border: 1px solid #ffffff;
   background: transparent;
   color: #a0a0a0;
   cursor: pointer;
   font-size: 13px;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   font-weight: 500;
+
+  /* subtle constant glow */
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
 }
 
 .category-chip:hover {
@@ -183,14 +186,14 @@
 .submit-button {
   padding: 8px 16px;
   font-size: 14px;
-  background-color: #0f172a;
+  background-color: #020202;
   color: #f1f5f9;
-  border: 1px solid #334155;
+  border: 1px solid #181818;
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .submit-button:hover {
-  background-color: #1e293b;
+  background-color: #838383;
 }

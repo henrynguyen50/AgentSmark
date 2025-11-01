@@ -5,7 +5,7 @@ import type React from "react"
 import { useState } from "react"
 import "../styles/QueryPopup.css"
 
-const CATEGORIES = ["Sport", "TV", "Movie"]
+const CATEGORIES = ["Sport", "Movie", "TV"]
 
 export default function QueryPopup() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -68,7 +68,7 @@ export default function QueryPopup() {
   <div className="input-wrapper">
     <input
       type="text"
-      placeholder="Ask me anything..."
+      placeholder="Ask me for a team, movie, or tv show..."
       value={input}
       onChange={(e) => setInput(e.target.value)}
       className="main-input"
