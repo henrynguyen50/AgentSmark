@@ -19,7 +19,11 @@ export default function QueryPopup() {
       alert("Please select a category and enter a query")
       return
     }
-
+    const newTab = window.open("", "_blank");
+    if (!newTab) {
+    alert("Popup blocked! Please allow popups for this site.");
+    return;
+  }
     setLoading(true)
     try {
       const response = await fetch("https://agent-smark-backend.onrender.com/watch", {
@@ -34,7 +38,7 @@ export default function QueryPopup() {
       const data = await response.json()
       console.log("Response:", data)
       if (data.embed_url) {
-        window.open(data.embed_url, "_blank")
+        newTab.location.href = data.embed_url
     }
       setInput("")
       setSelectedCategory(null)
