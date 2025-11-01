@@ -15,7 +15,7 @@ export default function QueryPopup() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    
+    if(!selectedCategory) return
 
     setLoading(true)
     setAgentMessage("Checking for your stream...")
