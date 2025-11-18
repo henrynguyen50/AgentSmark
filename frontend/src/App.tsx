@@ -1,7 +1,8 @@
 import "./App.css"
 import QueryPopup from "./components/QueryPopup"
-import { Analytics } from '@vercel/analytics/next';
+import { inject } from '@vercel/analytics';
 
+inject();
 function App() {
   return (
     <div className="app-container">
@@ -19,7 +20,7 @@ function App() {
         </section>
 
         <QueryPopup />
-        <Analytics />
+      
 
       </main>
 
