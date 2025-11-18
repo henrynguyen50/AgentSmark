@@ -1,5 +1,6 @@
 import "./App.css"
 import QueryPopup from "./components/QueryPopup"
+import { Analytics } from '@vercel/analytics/next';
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
         </section>
 
         <QueryPopup />
-
+        <Analytics />
 
       </main>
 
