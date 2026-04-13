@@ -5,43 +5,44 @@ import "../styles/QueryPopup.css"
 
 const CATEGORIES = ["Sport", "Movie", "TV"]
 
+interface StreamResult {
+  title: string
+  embed_url: string
+}
+
 export default function QueryPopup() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [input, setInput] = useState("")
   const [loading, setLoading] = useState(false)
   const [agentMessage, setAgentMessage] = useState<string | null>(null)
-  const [streamUrl, setStreamUrl] = useState<string | null>(null)
+  const [results, setResults] = useState<StreamResult[]>([])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
-    if(!selectedCategory) return
+    if (!selectedCategory) return
 
     setLoading(true)
-    setAgentMessage("Checking for your stream...")
-    setStreamUrl(null)
+    setAgentMessage("Searching for streams...")
+    setResults([])
 
     try {
-      const response = await fetch(
-        "https://agent-smark-backend.onrender.com/watch",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            category: selectedCategory.toLowerCase(),
-            query: input.trim(),
-          }),
-        }
-      )
+      const response = await fetch("http://127.0.0.1:8000/watch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          category: selectedCategory.toLowerCase(),
+          query: input.trim(),
+        }),
+      })
 
       const data = await response.json()
-      console.log("Response:", data)
 
-      if (data.embed_url) {
-        setStreamUrl(data.embed_url)
-        setAgentMessage("Your stream is ready! Click below to watch ➤")
+      // Expects: { results: [{ title, embed_url }]
+      if (data.results && data.results.length > 0) {
+        setResults(data.results)
+        setAgentMessage(`${data.results.length} result${data.results.length > 1 ? "s" : ""} found.`)
       } else {
-        setAgentMessage("Sorry, no valid stream found")
+        setAgentMessage("Sorry, no streams found")
       }
 
       setInput("")
@@ -50,7 +51,7 @@ export default function QueryPopup() {
       console.error("Error fetching stream:", error)
       setAgentMessage("An error occurred. Please try again.")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
@@ -63,9 +64,7 @@ export default function QueryPopup() {
               <button
                 key={category}
                 type="button"
-                className={`category-chip ${
-                  selectedCategory === category ? "active" : ""
-                }`}
+                className={`category-chip ${selectedCategory === category ? "active" : ""}`}
                 onClick={() => setSelectedCategory(category)}
               >
                 {category}
@@ -87,19 +86,28 @@ export default function QueryPopup() {
               className="submit-button"
               disabled={!selectedCategory || !input.trim() || loading}
             >
-              {loading ? "Thinking..." : "Submit"}
+              {loading ? "Searching..." : "Submit"}
             </button>
           </div>
 
           {agentMessage && <p className="agent-message">{agentMessage}</p>}
 
-          {streamUrl && (
-            <button
-              className="stream-ready-button"
-              onClick={() => window.open(streamUrl, "_blank")}
-            >
-              Watch Now ➤
-            </button>
+          {results.length > 0 && (
+            <div className="results-list">
+              {results.map((result, i) => (
+                <div key={i} className="result-card">
+                  <button
+                    type="button"
+                    className="watch-button"
+                    onClick={() => window.open(result.embed_url, "_blank")}
+                  >
+                                        <p className="result-title">{result.title.toUpperCase()}</p>
+ 
+                  </button>
+                  <br></br>
+                </div>
+              ))}
+            </div>
           )}
         </form>
       </div>
