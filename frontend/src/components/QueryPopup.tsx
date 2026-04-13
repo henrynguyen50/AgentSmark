@@ -26,7 +26,7 @@ export default function QueryPopup() {
     setResults([])
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/watch", {
+      const response = await fetch("https://agent-smark-backend.onrender.com/watch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
