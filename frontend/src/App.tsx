@@ -8,7 +8,6 @@ function App() {
     <div className="app-container">
       <header className="website-header">
         <div className="header-content">
-          <h1>They hate to see the SYSTEM actually FIGURED OUT</h1>
           
         </div>
       </header>
