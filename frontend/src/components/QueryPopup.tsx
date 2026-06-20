@@ -1,13 +1,20 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import "../styles/QueryPopup.css"
 
 const CATEGORIES = ["Sport", "Movie", "TV"]
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://agent-smark-backend.onrender.com";
+
 interface StreamResult {
   title: string
   embed_url: string
+  poster_path?: string
+  backdrop_path?: string
+  overview?: string
+  release_date?: string
+  first_air_date?: string
 }
 
 export default function QueryPopup() {
@@ -16,6 +23,10 @@ export default function QueryPopup() {
   const [loading, setLoading] = useState(false)
   const [agentMessage, setAgentMessage] = useState<string | null>(null)
   const [results, setResults] = useState<StreamResult[]>([])
+  const [lastSearchCategory, setLastSearchCategory] = useState<string | null>(null)
+  
+  // Logos for Sport Results
+  const [logos, setLogos] = useState<Record<string, string>>({})
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,20 +35,23 @@ export default function QueryPopup() {
     setLoading(true)
     setAgentMessage("Searching for streams...")
     setResults([])
+    setLogos({})
+    
+    const categoryLower = selectedCategory.toLowerCase()
+    setLastSearchCategory(categoryLower)
 
     try {
-      const response = await fetch("https://agent-smark-backend.onrender.com/watch", {
+      const response = await fetch(`${API_BASE_URL}/watch`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          category: selectedCategory.toLowerCase(),
+          category: categoryLower,
           query: input.trim(),
         }),
       })
 
       const data = await response.json()
 
-      // Expects: { results: [{ title, embed_url }]
       if (data.results && data.results.length > 0) {
         setResults(data.results)
         setAgentMessage(`${data.results.length} result${data.results.length > 1 ? "s" : ""} found.`)
@@ -55,61 +69,248 @@ export default function QueryPopup() {
     }
   }
 
+  // Fetch sport team logos
+  useEffect(() => {
+    if (results.length === 0 || lastSearchCategory !== "sport") {
+      setLogos({})
+      return
+    }
+
+    const uniqueTeams = new Set<string>()
+    results.forEach((r) => {
+      const parts = r.title.split(/\s+vs\.?\s+/i)
+      parts.forEach((part) => {
+        const team = part.trim()
+        if (team) uniqueTeams.add(team)
+      })
+    })
+
+    const fetchLogo = async (teamName: string) => {
+      try {
+        const res = await fetch(
+          `https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t=${encodeURIComponent(teamName)}`
+        )
+        if (!res.ok) return null
+        const data = await res.json()
+        if (data && data.teams && data.teams.length > 0) {
+          return data.teams[0].strBadge || data.teams[0].strLogo || null
+        }
+      } catch (err) {
+        console.error("Error fetching logo: " + teamName, err)
+      }
+      return null
+    }
+
+    const fetchAllLogos = async () => {
+      const logoMap: Record<string, string> = {}
+      const teamList = Array.from(uniqueTeams)
+      
+      // Batch fetches to avoid rate limits
+      const batchSize = 5
+      for (let i = 0; i < teamList.length; i += batchSize) {
+        const batch = teamList.slice(i, i + batchSize)
+        await Promise.all(
+          batch.map(async (team) => {
+            const logo = await fetchLogo(team)
+            if (logo) {
+              logoMap[team] = logo
+            }
+          })
+        )
+      }
+      setLogos(logoMap)
+    }
+
+    fetchAllLogos()
+  }, [results, lastSearchCategory])
+
+  const getTeamInitials = (name: string) => {
+    const clean = name.replace(/[^a-zA-Z0-9\s]/g, "").trim()
+    const words = clean.split(/\s+/)
+    if (words.length >= 2) {
+      return (words[0][0] + words[1][0]).toUpperCase()
+    }
+    return clean.substring(0, 2).toUpperCase()
+  }
+
+  const getTeamColor = (name: string) => {
+    let hash = 0
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash)
+    }
+    const h = Math.abs(hash) % 360
+    return `linear-gradient(135deg, hsl(${h}, 70%, 45%) 0%, hsl(${(h + 40) % 360}, 80%, 30%) 100%)`
+  }
+
   return (
     <div className="popup-overlay">
-      <div className="popup-container">
-        <form onSubmit={handleSubmit} className="center-section">
-          <div className="category-chips">
-            {CATEGORIES.map((category) => (
-              <button
-                key={category}
-                type="button"
-                className={`category-chip ${selectedCategory === category ? "active" : ""}`}
-                onClick={() => setSelectedCategory(category)}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-
-          <div className="input-wrapper">
-            <input
-              type="text"
-              placeholder="Ask me for a team, movie, or TV show..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              className="main-input"
-              disabled={!selectedCategory || loading}
-            />
-            <button
-              type="submit"
-              className="submit-button"
-              disabled={!selectedCategory || !input.trim() || loading}
-            >
-              {loading ? "Searching..." : "Submit"}
-            </button>
-          </div>
-
-          {agentMessage && <p className="agent-message">{agentMessage}</p>}
-
-          {results.length > 0 && (
-            <div className="results-list">
-              {results.map((result, i) => (
-                <div key={i} className="result-card">
-                  <button
-                    type="button"
-                    className="watch-button"
-                    onClick={() => window.open(result.embed_url, "_blank")}
-                  >
-                                        <p className="result-title">{result.title.toUpperCase()}</p>
- 
-                  </button>
-                  <br></br>
-                </div>
+      <div className="query-flow-container">
+        <div className="popup-container">
+          <form onSubmit={handleSubmit} className="center-section">
+            <div className="category-chips">
+              {CATEGORIES.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  className={`category-chip ${selectedCategory === category ? "active" : ""}`}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category}
+                </button>
               ))}
             </div>
-          )}
-        </form>
+
+            <div className="input-wrapper">
+              <input
+                type="text"
+                placeholder={
+                  selectedCategory 
+                    ? `Search for ${selectedCategory === "Sport" ? "a match or team" : `a ${selectedCategory.toLowerCase()}`}...` 
+                    : "First select a category above..."
+                }
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                className="main-input"
+                disabled={!selectedCategory || loading}
+              />
+              <button
+                type="submit"
+                className="submit-button"
+                disabled={!selectedCategory || !input.trim() || loading}
+              >
+                {loading ? "Searching..." : "Submit"}
+              </button>
+            </div>
+
+            {agentMessage && <p className="agent-message">{agentMessage}</p>}
+          </form>
+        </div>
+
+        {results.length > 0 && (
+          <div className="results-wrapper">
+            {lastSearchCategory === "sport" ? (
+              <div className="sports-results-grid">
+                {results.map((result, i) => {
+                  const parts = result.title.split(/\s+vs\.?\s+/i)
+                  const isVs = parts.length >= 2
+                  const team1 = parts[0]?.trim()
+                  const team2 = parts[1]?.trim()
+
+                  return (
+                    <div key={i} className="sport-result-card">
+                      {isVs ? (
+                        <div className="sport-card-teams">
+                          <div className="sport-card-team">
+                            {logos[team1] ? (
+                              <img
+                                src={logos[team1]}
+                                alt={team1}
+                                className="sport-card-logo"
+                                onError={() => {
+                                  setLogos((prev) => {
+                                    const updated = { ...prev };
+                                    delete updated[team1];
+                                    return updated;
+                                  });
+                                }}
+                              />
+                            ) : (
+                              <div className="sport-card-fallback" style={{ background: getTeamColor(team1) }}>
+                                {getTeamInitials(team1)}
+                              </div>
+                            )}
+                            <span className="sport-card-teamname">{team1}</span>
+                          </div>
+                          <span className="sport-card-vs">VS</span>
+                          <div className="sport-card-team">
+                            {logos[team2] ? (
+                              <img
+                                src={logos[team2]}
+                                alt={team2}
+                                className="sport-card-logo"
+                                onError={() => {
+                                  setLogos((prev) => {
+                                    const updated = { ...prev };
+                                    delete updated[team2];
+                                    return updated;
+                                  });
+                                }}
+                              />
+                            ) : (
+                              <div className="sport-card-fallback" style={{ background: getTeamColor(team2) }}>
+                                {getTeamInitials(team2)}
+                              </div>
+                            )}
+                            <span className="sport-card-teamname">{team2}</span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="sport-card-single">
+                          <span className="sport-single-icon">⚽</span>
+                          <span className="sport-single-title">{result.title}</span>
+                        </div>
+                      )}
+                      <a
+                        href={result.embed_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="watch-now-button"
+                      >
+                        Watch Live Feed
+                      </a>
+                    </div>
+                  )
+                })}
+              </div>
+            ) : (
+              <div className="tmdb-results-grid">
+                {results.map((result, i) => {
+                  const year = (result.release_date || result.first_air_date || "").substring(0, 4)
+                  return (
+                    <div key={i} className="tmdb-result-card">
+                      <div className="tmdb-poster-container">
+                        {result.poster_path ? (
+                          <img
+                            src={`https://image.tmdb.org/t/p/w500${result.poster_path}`}
+                            alt={result.title}
+                            className="tmdb-poster"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="tmdb-poster-fallback">
+                            <span className="fallback-icon">🎬</span>
+                            <span className="fallback-title">{result.title}</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="tmdb-info">
+                        <div className="tmdb-title-row">
+                          <h3 className="tmdb-title">{result.title}</h3>
+                          {year && <span className="tmdb-year">{year}</span>}
+                        </div>
+                        {result.overview && (
+                          <p className="tmdb-overview">
+                            {result.overview.length > 140
+                              ? result.overview.substring(0, 137) + "..."
+                              : result.overview}
+                          </p>
+                        )}
+                        <a
+                          href={result.embed_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="watch-now-button"
+                        >
+                          Watch Now
+                        </a>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )
