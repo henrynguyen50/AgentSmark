@@ -13,6 +13,7 @@ function App() {
     <div className="app-container">
       <header className="website-header">
         <div className="header-content">
+<<<<<<< HEAD
           <div className="logo-section">
             <span className="logo-icon">⚡</span>
             <h1>SFO</h1>
@@ -31,6 +32,9 @@ function App() {
               Live Sports
             </button>
           </nav>
+=======
+          
+>>>>>>> a7766e185eeab5f5cd4cdd103a14e0aaf712764f
         </div>
       </header>
 
