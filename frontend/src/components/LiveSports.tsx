@@ -162,6 +162,16 @@ export default function LiveSports() {
 
             return (
               <div key={idx} className="fixture-card">
+                <div className="card-header">
+                  <div className="live-badge-container">
+                    <span className="live-dot"></span>
+                    <span className="live-text">LIVE</span>
+                  </div>
+                  <span className="channels-count">
+                    {fixture.streams.length} {fixture.streams.length === 1 ? "Channel" : "Channels"}
+                  </span>
+                </div>
+
                 {isVs ? (
                   <div className="teams-vs-container">
                     <div className="team-column left-team">
@@ -228,7 +238,6 @@ export default function LiveSports() {
                 )}
 
                 <div className="stream-actions-container">
-                  <h4 className="streams-label">Available Channels ({fixture.streams.length})</h4>
                   <div className="stream-buttons-grid">
                     {fixture.streams.map((stream, sIdx) => (
                       <a
