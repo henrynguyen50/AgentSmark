@@ -60,7 +60,7 @@ export default function LiveSports() {
     const fetchLogo = async (teamName: string) => {
       try {
         const res = await fetch(
-          `https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t=${encodeURIComponent(teamName)}`
+          `${API_BASE_URL}/sportsdb/searchteams?t=${encodeURIComponent(teamName)}`
         );
         if (!res.ok) return null;
         const data = await res.json();
