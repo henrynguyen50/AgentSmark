@@ -3,7 +3,7 @@
 ## 1. Core Workflow Topology (PLAN -> CONTRACT -> CODE -> VERIFY)
 Always follow this workflow for executing any task:
 1. **Orchestrate & Plan**: Decompose the goal into independent domain tasks.
-2. **Contract First**: Define and commit API schemas (OpenAPI, Protobufs, or TypeScript interfaces) before implementation.
+2. **Contract First**: Define and commit API schemas before implementation.
 3. **Parallel Execution**: Spawn specialized coding subagents for each repository or worktree.
 4. **Independent Review**: Utilize an Advisor/Reviewer subagent to audit code changes against the contracts.
 
@@ -23,9 +23,5 @@ Always follow this workflow for executing any task:
 
 ## 4. Test-Driven Development (TDD)
 - **Zero-Code Tests**: Write fail-cases (unit/integration tests) first. Verify the tests fail on the target container/environment before writing implementation.
-- **Containerized Verification**: All microservices must be tested inside their respective container environments (Docker/Kubernetes). Verification claims must be grounded in test runner outputs within the container.
 - **No Test Suppressions**: Never bypass, mock out, or delete failing tests to satisfy a goal.
 
-## 5. Deployment & Infrastructure Cohesion
-- **Helm & CSP Configuration**: Any microservice addition or environment modification requires corresponding updates to Helm charts, Dockerfiles, and cloud infrastructure code.
-- **Metric Instrumentation**: Implement Prometheus metrics or database logging for all new operations to prepare them for /goal or /autoresearch targeting.
