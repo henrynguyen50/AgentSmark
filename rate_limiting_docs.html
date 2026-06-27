@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Search Endpoint Rate Limiting Documentation</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f6f8;
+        }
+        .container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e1e4e8;
+        }
+        h1 {
+            color: #1a73e8;
+            border-bottom: 2px solid #e1e4e8;
+            padding-bottom: 15px;
+            margin-top: 0;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 8px;
+            margin-top: 30px;
+        }
+        p, li {
+            font-size: 16px;
+        }
+        code {
+            background-color: #f1f3f4;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.9em;
+            color: #d73a49;
+        }
+        pre {
+            background-color: #24292e;
+            color: #f6f8fa;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .highlight {
+            color: #005cc5;
+        }
+        .note {
+            background-color: #e8f0fe;
+            border-left: 4px solid #1a73e8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .note-title {
+            font-weight: bold;
+            color: #1a73e8;
+            margin-bottom: 5px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gemini Search Endpoint Rate Limiting</h1>
+        <p>This documentation details the implementation of rate limiting on the Gemini search endpoint (<code>/watch</code>) in the backend of the AgentSmark project.</p>
+        
+        <h2>Overview</h2>
+        <p>To prevent abuse, quota exhaustion, and unnecessary API costs, the <code>/watch</code> endpoint is protected by a rate limiter. It restricts clients to a configurable limit (defaulting to <code>5 requests per minute</code>) per IP address.</p>
+        
+        <h2>Key Technologies Used</h2>
+        <ul>
+            <li><strong><a href="https://fastapi.tiangolo.com/" target="_blank">FastAPI</a></strong>: The web framework used to build the backend API.</li>
+            <li><strong><a href="https://github.com/laurentS/slowapi" target="_blank">SlowAPI</a></strong>: A rate-limiting library for FastAPI built on top of <a href="https://limits.readthedocs.io/" target="_blank">limits</a>.</li>
+        </ul>
+
+        <h2>Implementation Details</h2>
+        <p>The rate limiting logic is configured inside <a href="agent-smark-backend/main.py" target="_blank"><code>agent-smark-backend/main.py</code></a>:</p>
+        
+        <h3>1. Proxy-Aware IP Resolution</h3>
+        <p>To support deployments behind reverse proxies (such as Cloudflare, Vercel, or AWS Load Balancers), the limiter uses a custom <code>get_ip_address</code> function rather than the default remote address helper. It parses the client IP address from the standard <code>X-Forwarded-For</code> header:</p>
+        <pre><code>def get_ip_address(request: Request) -> str:
+    forwarded_for = request.headers.get("x-forwarded-for")
+    if forwarded_for:
+        return forwarded_for.split(",")[0].strip()
+    return request.client.host if request.client else "127.0.0.1"</code></pre>
+        <p>For details on how the <code>X-Forwarded-For</code> header works, refer to the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For" target="_blank">MDN Web Docs</a>.</p>
+
+        <h3>2. Endpoint Decoration</h3>
+        <p>The <code>/watch</code> endpoint is annotated with the limiter decorator:</p>
+        <pre><code>@app.post("/watch")
+@limiter.limit(RATE_LIMIT_WATCH)
+def watch(request: Request, req: QueryRequest):
+    ...</code></pre>
+
+        <h3>3. Exception Handling</h3>
+        <p>When a client exceeds the defined threshold, SlowAPI raises a <code>RateLimitExceeded</code> exception. This is handled globally using <code>_rate_limit_exceeded_handler</code>, returning an HTTP status code <strong><code>429 Too Many Requests</code></strong> with a detailed JSON payload.</p>
+
+        <h2>Configuration</h2>
+        <p>The rate limit is controlled by the environment variable <code>RATE_LIMIT_WATCH</code> defined in the <code>.env</code> file. If the environment variable is missing or empty, it gracefully falls back to the default:</p>
+        <ul>
+            <li><strong>Environment Variable</strong>: <code>RATE_LIMIT_WATCH</code></li>
+            <li><strong>Default Limit</strong>: <code>5/minute</code> (5 requests per minute)</li>
+            <li><strong>Example Formats</strong>: <code>10/minute</code>, <code>200/day</code>, <code>5/second</code></li>
+        </ul>
+
+        <div class="note">
+            <div class="note-title">Note on Serverless Deployments</div>
+            <p>SlowAPI tracks rate limits in-memory by default. If the backend is scaled horizontally across multiple servers or instances, a distributed storage backend like <a href="https://redis.io/" target="_blank">Redis</a> should be integrated by configuring the <code>storage_uri</code> parameter on the <code>Limiter</code> instance.</p>
+        </div>
+
+        <h2>Unit & Integration Tests</h2>
+        <p>We verify rate limiting using mock-based integration tests. The test file is located at <a href="agent-smark-backend/test_rate_limiter.py" target="_blank"><code>agent-smark-backend/test_rate_limiter.py</code></a>.</p>
+        <p>To run the test suite, navigate to the backend directory and execute:</p>
+        <pre><code>python -m unittest test_rate_limiter.py</code></pre>
+        
+        <p>The tests cover:</p>
+        <ul>
+            <li><strong>Basic Rate Limiting</strong>: Confirms 5 consecutive requests return status <code>200</code> and the 6th request returns status <code>429</code>.</li>
+            <li><strong>IP Isolation</strong>: Confirms that requests originating from different <code>X-Forwarded-For</code> headers are tracked in separate limit buckets.</li>
+        </ul>
+    </div>
+</body>
+</html>
