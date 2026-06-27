@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import "../styles/QueryPopup.css"
 
 const CATEGORIES = ["Sport", "Movie", "TV"]
@@ -25,8 +25,6 @@ export default function QueryPopup() {
   const [results, setResults] = useState<StreamResult[]>([])
   const [lastSearchCategory, setLastSearchCategory] = useState<string | null>(null)
   
-  // Logos for Sport Results
-  const [logos, setLogos] = useState<Record<string, string>>({})
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -35,7 +33,6 @@ export default function QueryPopup() {
     setLoading(true)
     setAgentMessage("Searching for streams...")
     setResults([])
-    setLogos({})
     
     const categoryLower = selectedCategory.toLowerCase()
     setLastSearchCategory(categoryLower)
@@ -69,60 +66,6 @@ export default function QueryPopup() {
     }
   }
 
-  // Fetch sport team logos
-  useEffect(() => {
-    if (results.length === 0 || lastSearchCategory !== "sport") {
-      setLogos({})
-      return
-    }
-
-    const uniqueTeams = new Set<string>()
-    results.forEach((r) => {
-      const parts = r.title.split(/\s+vs\.?\s+/i)
-      parts.forEach((part) => {
-        const team = part.trim()
-        if (team) uniqueTeams.add(team)
-      })
-    })
-
-    const fetchLogo = async (teamName: string) => {
-      try {
-        const res = await fetch(
-          `${API_BASE_URL}/sportsdb/searchteams?t=${encodeURIComponent(teamName)}`
-        )
-        if (!res.ok) return null
-        const data = await res.json()
-        if (data && data.teams && data.teams.length > 0) {
-          return data.teams[0].strBadge || data.teams[0].strLogo || null
-        }
-      } catch (err) {
-        console.error("Error fetching logo: " + teamName, err)
-      }
-      return null
-    }
-
-    const fetchAllLogos = async () => {
-      const logoMap: Record<string, string> = {}
-      const teamList = Array.from(uniqueTeams)
-      
-      // Batch fetches to avoid rate limits
-      const batchSize = 5
-      for (let i = 0; i < teamList.length; i += batchSize) {
-        const batch = teamList.slice(i, i + batchSize)
-        await Promise.all(
-          batch.map(async (team) => {
-            const logo = await fetchLogo(team)
-            if (logo) {
-              logoMap[team] = logo
-            }
-          })
-        )
-      }
-      setLogos(logoMap)
-    }
-
-    fetchAllLogos()
-  }, [results, lastSearchCategory])
 
   const getTeamInitials = (name: string) => {
     const clean = name.replace(/[^a-zA-Z0-9\s]/g, "").trim()
@@ -201,46 +144,16 @@ export default function QueryPopup() {
                       {isVs ? (
                         <div className="sport-card-teams">
                           <div className="sport-card-team">
-                            {logos[team1] ? (
-                              <img
-                                src={logos[team1]}
-                                alt={team1}
-                                className="sport-card-logo"
-                                onError={() => {
-                                  setLogos((prev) => {
-                                    const updated = { ...prev };
-                                    delete updated[team1];
-                                    return updated;
-                                  });
-                                }}
-                              />
-                            ) : (
-                              <div className="sport-card-fallback" style={{ background: getTeamColor(team1) }}>
-                                {getTeamInitials(team1)}
-                              </div>
-                            )}
+                            <div className="sport-card-fallback" style={{ background: getTeamColor(team1) }}>
+                              {getTeamInitials(team1)}
+                            </div>
                             <span className="sport-card-teamname">{team1}</span>
                           </div>
                           <span className="sport-card-vs">VS</span>
                           <div className="sport-card-team">
-                            {logos[team2] ? (
-                              <img
-                                src={logos[team2]}
-                                alt={team2}
-                                className="sport-card-logo"
-                                onError={() => {
-                                  setLogos((prev) => {
-                                    const updated = { ...prev };
-                                    delete updated[team2];
-                                    return updated;
-                                  });
-                                }}
-                              />
-                            ) : (
-                              <div className="sport-card-fallback" style={{ background: getTeamColor(team2) }}>
-                                {getTeamInitials(team2)}
-                              </div>
-                            )}
+                            <div className="sport-card-fallback" style={{ background: getTeamColor(team2) }}>
+                              {getTeamInitials(team2)}
+                            </div>
                             <span className="sport-card-teamname">{team2}</span>
                           </div>
                         </div>

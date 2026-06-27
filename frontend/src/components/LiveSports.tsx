@@ -9,6 +9,7 @@ interface StreamSource {
 
 interface GroupedFixture {
   title: string;
+  start_time?: number;
   streams: StreamSource[];
 }
 
@@ -18,7 +19,6 @@ export default function LiveSports() {
   const [fixtures, setFixtures] = useState<GroupedFixture[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [logos, setLogos] = useState<Record<string, string>>({});
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -42,59 +42,6 @@ export default function LiveSports() {
     fetchStreams();
   }, []);
 
-  // Fetch team logos from TheSportsDB
-  useEffect(() => {
-    if (fixtures.length === 0) return;
-
-    const uniqueTeams = new Set<string>();
-    fixtures.forEach((fixture) => {
-      const parts = fixture.title.split(/\s+vs\.?\s+/i);
-      parts.forEach((part) => {
-        const team = part.trim();
-        if (team) {
-          uniqueTeams.add(team);
-        }
-      });
-    });
-
-    const fetchLogo = async (teamName: string) => {
-      try {
-        const res = await fetch(
-          `${API_BASE_URL}/sportsdb/searchteams?t=${encodeURIComponent(teamName)}`
-        );
-        if (!res.ok) return null;
-        const data = await res.json();
-        if (data && data.teams && data.teams.length > 0) {
-          return data.teams[0].strBadge || data.teams[0].strLogo || null;
-        }
-      } catch (err) {
-        console.error("Error fetching logo for team: " + teamName, err);
-      }
-      return null;
-    };
-
-    const fetchAllLogos = async () => {
-      const logoMap: Record<string, string> = {};
-      const teamList = Array.from(uniqueTeams);
-      
-      // Fetch in batches to avoid overwhelming the API
-      const batchSize = 5;
-      for (let i = 0; i < teamList.length; i += batchSize) {
-        const batch = teamList.slice(i, i + batchSize);
-        await Promise.all(
-          batch.map(async (team) => {
-            const logo = await fetchLogo(team);
-            if (logo) {
-              logoMap[team] = logo;
-            }
-          })
-        );
-      }
-      setLogos((prev) => ({ ...prev, ...logoMap }));
-    };
-
-    fetchAllLogos();
-  }, [fixtures]);
 
   const getTeamInitials = (name: string) => {
     const clean = name.replace(/[^a-zA-Z0-9\s]/g, "").trim();
@@ -112,6 +59,19 @@ export default function LiveSports() {
     }
     const h = Math.abs(hash) % 360;
     return `linear-gradient(135deg, hsl(${h}, 70%, 45%) 0%, hsl(${(h + 40) % 360}, 80%, 30%) 100%)`;
+  };
+
+  const formatStartTime = (startTimeMs?: number) => {
+    if (!startTimeMs) return null;
+    const now = Date.now();
+    const startDate = new Date(startTimeMs);
+    const timeString = startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
+    
+    if (now >= startTimeMs) {
+      return `Started at ${timeString}`;
+    } else {
+      return `Starts at ${timeString}`;
+    }
   };
 
   const filteredFixtures = fixtures.filter((f) =>
@@ -159,13 +119,29 @@ export default function LiveSports() {
             const isVs = parts.length >= 2;
             const team1 = parts[0]?.trim();
             const team2 = parts[1]?.trim();
+            const now = Date.now();
+            const isLive = !fixture.start_time || now >= fixture.start_time;
 
             return (
               <div key={idx} className="fixture-card">
                 <div className="card-header">
-                  <div className="live-badge-container">
-                    <span className="live-dot"></span>
-                    <span className="live-text">LIVE</span>
+                  <div className="card-header-left">
+                    {isLive ? (
+                      <div className="live-badge-container">
+                        <span className="live-dot"></span>
+                        <span className="live-text">LIVE</span>
+                      </div>
+                    ) : (
+                      <div className="upcoming-badge-container">
+                        <span className="upcoming-dot"></span>
+                        <span className="upcoming-text">UPCOMING</span>
+                      </div>
+                    )}
+                    {fixture.start_time ? (
+                      <span className="fixture-time-badge">
+                        {formatStartTime(fixture.start_time)}
+                      </span>
+                    ) : null}
                   </div>
                   <span className="channels-count">
                     {fixture.streams.length} {fixture.streams.length === 1 ? "Channel" : "Channels"}
@@ -175,28 +151,12 @@ export default function LiveSports() {
                 {isVs ? (
                   <div className="teams-vs-container">
                     <div className="team-column left-team">
-                      {logos[team1] ? (
-                        <img
-                          src={logos[team1]}
-                          alt={team1}
-                          className="team-logo"
-                          loading="lazy"
-                          onError={() => {
-                            setLogos((prev) => {
-                              const updated = { ...prev };
-                              delete updated[team1];
-                              return updated;
-                            });
-                          }}
-                        />
-                      ) : (
-                        <div
-                          className="team-logo-fallback"
-                          style={{ background: getTeamColor(team1) }}
-                        >
-                          {getTeamInitials(team1)}
-                        </div>
-                      )}
+                      <div
+                        className="team-logo-fallback"
+                        style={{ background: getTeamColor(team1) }}
+                      >
+                        {getTeamInitials(team1)}
+                      </div>
                       <span className="team-name">{team1}</span>
                     </div>
 
@@ -205,28 +165,12 @@ export default function LiveSports() {
                     </div>
 
                     <div className="team-column right-team">
-                      {logos[team2] ? (
-                        <img
-                          src={logos[team2]}
-                          alt={team2}
-                          className="team-logo"
-                          loading="lazy"
-                          onError={() => {
-                            setLogos((prev) => {
-                              const updated = { ...prev };
-                              delete updated[team2];
-                              return updated;
-                            });
-                          }}
-                        />
-                      ) : (
-                        <div
-                          className="team-logo-fallback"
-                          style={{ background: getTeamColor(team2) }}
-                        >
-                          {getTeamInitials(team2)}
-                        </div>
-                      )}
+                      <div
+                        className="team-logo-fallback"
+                        style={{ background: getTeamColor(team2) }}
+                      >
+                        {getTeamInitials(team2)}
+                      </div>
                       <span className="team-name">{team2}</span>
                     </div>
                   </div>
