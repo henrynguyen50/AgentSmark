@@ -9,6 +9,7 @@ interface StreamSource {
 
 interface GroupedFixture {
   title: string;
+  sport?: string;
   start_time?: number;
   streams: StreamSource[];
 }
@@ -20,6 +21,7 @@ export default function LiveSports() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSport, setSelectedSport] = useState<string>("all");
 
   useEffect(() => {
     const fetchStreams = async () => {
@@ -31,9 +33,9 @@ export default function LiveSports() {
         }
         const data: GroupedFixture[] = await res.json();
         setFixtures(data);
-      } catch (err: any) {
+      } catch (err) {
         console.error("Error fetching streams:", err);
-        setError(err.message || "An error occurred");
+        setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
         setLoading(false);
       }
@@ -74,9 +76,11 @@ export default function LiveSports() {
     }
   };
 
-  const filteredFixtures = fixtures.filter((f) =>
-    f.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredFixtures = fixtures.filter((f) => {
+    const matchesSearch = f.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSport = selectedSport === "all" || (f.sport && f.sport.toLowerCase() === selectedSport.toLowerCase());
+    return matchesSearch && matchesSport;
+  });
 
   return (
     <div className="live-sports-container">
@@ -91,6 +95,18 @@ export default function LiveSports() {
             className="sports-search-input"
           />
         </div>
+      </div>
+      
+      <div className="sport-category-scroller">
+        {["all", "basketball", "football", "soccer", "baseball"].map((sport) => (
+          <button
+            key={sport}
+            className={`sport-tab-btn ${selectedSport === sport ? "active" : ""}`}
+            onClick={() => setSelectedSport(sport)}
+          >
+            {sport === "all" ? "All Sports" : sport.charAt(0).toUpperCase() + sport.slice(1)}
+          </button>
+        ))}
       </div>
 
       {loading ? (

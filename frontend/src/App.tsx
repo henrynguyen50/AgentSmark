@@ -2,12 +2,13 @@ import { useState } from "react"
 import "./App.css"
 import QueryPopup from "./components/QueryPopup"
 import LiveSports from "./components/LiveSports"
+import Tables from "./components/Tables"
 import { inject } from '@vercel/analytics'
 
 inject()
 
 function App() {
-  const [activeTab, setActiveTab] = useState<"search" | "live">("search")
+  const [activeTab, setActiveTab] = useState<"search" | "live" | "tables">("search")
 
   return (
     <div className="app-container">
@@ -30,25 +31,39 @@ function App() {
             >
               Live Sports
             </button>
+            <button
+              onClick={() => setActiveTab("tables")}
+              className={`nav-link ${activeTab === "tables" ? "active" : ""}`}
+            >
+              The Tables
+            </button>
           </nav>
         </div>
       </header>
 
       <main className="website-main">
-        <section className="hero">
-          <h2>
-            {activeTab === "search"
-              ? "Search Sports, TV, & Movies for Streams"
-              : "Active Live Sports Stream Coverage"}
-          </h2>
-          <p>
-            {activeTab === "search"
-              ? "Select a category and search away!"
-              : "Watch real-time live games directly from multiple sources."}
-          </p>
-        </section>
+        {activeTab !== "tables" && (
+          <section className="hero">
+            <h2>
+              {activeTab === "search"
+                ? "Search Sports, TV, & Movies for Streams"
+                : "Active Live Sports Stream Coverage"}
+            </h2>
+            <p>
+              {activeTab === "search"
+                ? "Select a category and search away!"
+                : "Watch real-time live games directly from multiple sources."}
+            </p>
+          </section>
+        )}
 
-        {activeTab === "search" ? <QueryPopup /> : <LiveSports />}
+        {activeTab === "search" ? (
+          <QueryPopup />
+        ) : activeTab === "live" ? (
+          <LiveSports />
+        ) : (
+          <Tables />
+        )}
       </main>
 
       <footer className="website-footer">

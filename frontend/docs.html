@@ -292,7 +292,20 @@
           <p>
             <em>Cleared / Deprecated.</em> This component was removed from the codebase to bypass iframe constraints, CORS errors, 
             and media controller bugs on embed sources. Stream links are now resolved in new tabs (<code>target="_blank"</code>), 
+            Cleared / Deprecated. This component was removed from the codebase to bypass iframe constraints, CORS errors, 
+            and media controller bugs on embed sources. Stream links are now resolved in new tabs (<code>target="_blank"</code>), 
             ensuring full player compatibility.
+          </p>
+        </div>
+
+        <!-- src/components/Tables.tsx -->
+        <div class="card">
+          <h3>
+            <a href="./src/components/Tables.tsx">src/components/Tables.tsx</a>
+            <span class="badge badge-react">Tables Component</span>
+          </h3>
+          <p>
+            Implements the "The Tables" gaming and streaming view. Features register/login forms connecting to FastAPI auth routes, a lobby showing active sports categories (Basketball, Football, Soccer, Baseball) and active streaming fixtures, a Game Station split-screen view with embed iframe player and player props (Over/Under picks), a parlay slip builder for placing 2-5 leg parlays, and active parlay trackers with real-time simulated progress feeds and floating alert cards that update when props increase or settle. Now features a multi-channel stream/channel selector tab system in the Game Station to choose from multiple live broadcast links, and highlights pitching strikeouts / strikeouts props with a premium gold/amber theme (distinct badge, border, and glow effects) to make them prominent in the props selection tab, parlay slip, and placed parlays history list.
           </p>
         </div>
       </div>
@@ -328,7 +341,9 @@
           <strong><a href="./src/styles/VideoPlayerModal.css">src/styles/VideoPlayerModal.css</a>:</strong> <em>Cleared / Deprecated.</em> 
           Empty styling sheet associated with the deprecated video player modal.
         </li>
-      </ul>
+        <li>
+          <strong><a href="./src/styles/Tables.css">src/styles/Tables.css</a>:</strong> Layout and presentation rules for the Tables component. Configures the split-screen workspace grids, auth card formatting, prop selection buttons active states, parlay slip layouts, and keyframe animations for floating update alert cards.
+        </li>
     </section>
 
     <!-- Section 4: Configuration Details -->
