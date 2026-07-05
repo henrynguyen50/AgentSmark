@@ -719,31 +719,13 @@ export default function Tables() {
                   </div>
 
                   {selectedPropsFixture && (
-                    <div style={{
-                      background: "rgba(59, 130, 246, 0.15)",
-                      border: "1px solid rgba(59, 130, 246, 0.3)",
-                      borderRadius: "8px",
-                      padding: "12px 16px",
-                      marginBottom: "16px",
-                      marginTop: "16px",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center"
-                    }}>
-                      <span style={{ fontSize: "14px", color: "#f8fafc" }}>
+                    <div className="props-filter-banner">
+                      <span className="props-filter-text">
                         Showing props for <strong>{selectedPropsFixture.title}</strong>.
                       </span>
                       <button
                         onClick={() => setSelectedPropsFixture(null)}
-                        style={{
-                          background: "none",
-                          border: "none",
-                          color: "#60a5fa",
-                          cursor: "pointer",
-                          fontSize: "14px",
-                          fontWeight: 600,
-                          padding: 0
-                        }}
+                        className="props-filter-btn"
                       >
                         Show All Games
                       </button>
@@ -769,7 +751,7 @@ export default function Tables() {
 
                     if (allPlayerProps.length > 0) {
                       return (
-                        <div className="fixtures-props-column" style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "16px" }}>
+                        <div className="fixtures-props-column" style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "12px" }}>
                           {allPlayerProps.map((prop, propIdx) => {
                             const gameStarted = prop.fixtureStartTime > 0 && Date.now() >= prop.fixtureStartTime;
                             const legInSlip = parlaySlip.find(
@@ -784,43 +766,23 @@ export default function Tables() {
                             return (
                               <div 
                                 key={propIdx} 
-                                className="prop-selection-row" 
-                                style={{ 
-                                  opacity: gameStarted ? 0.6 : 1, 
-                                  padding: "16px", 
-                                  background: isStrikeoutsProp ? "rgba(245, 158, 11, 0.05)" : "rgba(15, 23, 42, 0.4)", 
-                                  border: isStrikeoutsProp ? "1px solid rgba(245, 158, 11, 0.3)" : "1px solid rgba(255, 255, 255, 0.06)", 
-                                  borderRadius: "10px",
-                                  boxShadow: isStrikeoutsProp ? "0 0 10px rgba(245, 158, 11, 0.05)" : "none"
-                                }}
+                                className={`prop-selection-row ${isStrikeoutsProp ? "strikeouts-prop" : ""}`}
+                                style={{ opacity: gameStarted ? 0.6 : 1 }}
                               >
                                 <div className="prop-row-left">
                                   <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
-                                    <span className="prop-player-name" style={{ fontWeight: 700, fontSize: "15px" }}>{prop.player_name}</span>
-                                    <span style={{ 
-                                      fontSize: "11px", 
-                                      fontWeight: 800, 
-                                      background: isStrikeoutsProp ? "rgba(245, 158, 11, 0.25)" : "rgba(56, 189, 248, 0.15)", 
-                                      color: isStrikeoutsProp ? "#fbbf24" : "#38bdf8", 
-                                      border: isStrikeoutsProp ? "1px solid rgba(245, 158, 11, 0.4)" : "none",
-                                      padding: "2px 8px", 
-                                      borderRadius: "4px",
-                                      textTransform: "uppercase",
-                                      letterSpacing: "0.05em",
-                                      display: "inline-flex",
-                                      alignItems: "center",
-                                      gap: "4px"
-                                    }}>
+                                    <span className="prop-player-name">{prop.player_name}</span>
+                                    <span className={`prop-badge ${isStrikeoutsProp ? "strikeouts-badge" : "regular-badge"}`}>
                                       {isStrikeoutsProp ? "⭐ " : ""}{prop.prop_type}
                                     </span>
                                   </div>
-                                  <div style={{ display: "flex", gap: "8px", alignItems: "center", marginTop: "4px" }}>
-                                    <span style={{ fontSize: "11px", color: "#94a3b8" }}>{prop.fixtureTitle}</span>
+                                  <div className="prop-fixture-title-wrapper">
+                                    <span className="prop-fixture-title">{prop.fixtureTitle}</span>
                                   </div>
                                 </div>
                                 <div className="prop-row-right">
                                   {gameStarted && (
-                                    <span style={{ color: "#ef4444", fontWeight: 700, fontSize: "11px", marginRight: "8px" }}>Betting Locked</span>
+                                    <span className="betting-locked-label">Betting Locked</span>
                                   )}
                                   <div className="prop-line-value">{prop.line}</div>
                                   <div className="prop-selection-buttons">
@@ -847,7 +809,7 @@ export default function Tables() {
                       );
                     } else {
                       return (
-                        <div style={{ color: "#94a3b8", fontSize: "14px", fontStyle: "italic", textAlign: "center", padding: "40px 0" }}>
+                        <div className="props-empty">
                           No player props available for the selected category
                         </div>
                       );

@@ -6,49 +6,51 @@
   <title>AgentSmark Frontend Application Documentation</title>
   <style>
     :root {
-      --bg-color: #000000;
-      --card-bg: #0f172a;
-      --card-hover: #1e293b;
-      --border-color: #1e293b;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --primary: #38bdf8;
-      --primary-hover: #0ea5e9;
-      --success: #34d399;
-      --warning: #fbbf24;
-      --code-bg: #020617;
+      --bg-color: #008080;
+      --card-bg: #ece9d8;
+      --card-hover: #f1efe2;
+      --border-color: #ffffff;
+      --text-main: #000000;
+      --text-muted: #555555;
+      --primary: #000080;
+      --primary-hover: #cc0000;
+      --success: #008000;
+      --warning: #cc6600;
+      --code-bg: #ffffff;
     }
 
     body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: Tahoma, Arial, "MS Sans Serif", Geneva, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-main);
       margin: 0;
       padding: 0;
-      line-height: 1.6;
+      line-height: 1.4;
+      font-size: 13px;
     }
 
     header {
-      background: linear-gradient(135deg, #0f172a 0%, #000000 100%);
-      border-bottom: 1px solid var(--border-color);
-      padding: 40px 20px;
+      background-color: #ece9d8;
+      border-bottom: 2px solid #808080;
+      padding: 20px;
       text-align: center;
+      font-family: Tahoma, Arial, sans-serif;
+      box-shadow: inset 0 -1px 0 #ffffff;
     }
 
     header h1 {
       margin: 0;
-      font-size: 2.5rem;
-      background: linear-gradient(to right, #ffffff, var(--primary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-weight: 800;
-      letter-spacing: -0.02em;
+      font-size: 20px;
+      color: #000080;
+      font-weight: bold;
+      text-decoration: underline;
     }
 
     header p {
-      color: var(--text-muted);
-      margin-top: 10px;
-      font-size: 1.1rem;
+      color: #555555;
+      margin-top: 5px;
+      font-size: 12px;
+      font-weight: bold;
     }
 
     .container {
@@ -84,34 +86,30 @@
 
     .card {
       background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 24px;
-      transition: all 0.3s ease;
+      border: 2px outset #ffffff;
+      padding: 15px;
     }
 
     .card:hover {
-      transform: translateY(-2px);
       background-color: var(--card-hover);
-      border-color: var(--primary);
     }
 
     .card h3 {
       margin-top: 0;
-      margin-bottom: 12px;
-      font-size: 1.3rem;
+      margin-bottom: 8px;
+      font-size: 13px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
     .card h3 a {
-      color: var(--text-main);
-      text-decoration: none;
+      color: #0000ee;
+      text-decoration: underline;
     }
 
     .card h3 a:hover {
-      color: var(--primary);
+      color: #ff0000;
     }
 
     a {
@@ -152,36 +150,31 @@
 
     .badge {
       display: inline-block;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 700;
+      padding: 2px 6px;
+      font-size: 9px;
+      font-weight: bold;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      border: 1px solid #808080;
     }
 
     .badge-react {
-      background-color: rgba(56, 189, 248, 0.15);
-      color: var(--primary);
-      border: 1px solid rgba(56, 189, 248, 0.3);
+      background-color: #000080;
+      color: #ffffff;
     }
 
     .badge-css {
-      background-color: rgba(52, 211, 153, 0.15);
-      color: var(--success);
-      border: 1px solid rgba(52, 211, 153, 0.3);
+      background-color: #008000;
+      color: #ffffff;
     }
 
     .badge-deprecated {
-      background-color: rgba(239, 68, 68, 0.15);
-      color: #ef4444;
-      border: 1px solid rgba(239, 68, 68, 0.3);
+      background-color: #cc0000;
+      color: #ffffff;
     }
 
     .badge-config {
-      background-color: rgba(251, 191, 36, 0.15);
-      color: var(--warning);
-      border: 1px solid rgba(251, 191, 36, 0.3);
+      background-color: #e1dfd7;
+      color: #000000;
     }
 
     .external-links {
@@ -233,8 +226,9 @@
         <li>Monitor analytics and stream availability seamlessly.</li>
       </ul>
       <p>
-        To ensure a premium responsive user experience without heavy package overhead, the client uses a custom visual style system 
-        written in optimized vanilla CSS. Telemetry and analytics are integrated using Vercel Analytics.
+        To ensure a responsive user experience reminiscent of the classic web era, the client uses a custom visual style system 
+        written in optimized vanilla CSS that emulates the classic Windows XP desktop and browser chrome, retro beveled input fields, 
+        and digital counters. Telemetry and analytics are integrated using Vercel Analytics.
       </p>
     </section>
 
@@ -251,9 +245,10 @@
             <span class="badge badge-react">Root Component</span>
           </h3>
           <p>
-            The root layout component of the React application. It injects and triggers Vercel Analytics, manages the active tab 
-            state (swapping between the search interface and live sports listing), renders a responsive header logo, tab navigation bar, 
-            hero description panel, and structural footer.
+            The root layout component of the React application. It manages the active tab state, wraps the entire UI inside a 
+            Windows XP window frame mimicking Microsoft Internet Explorer (including a title bar with minimize/maximize/close controls, 
+            a mock menu bar, and an interactive address bar), and renders retro components like a scrolling marquee banner, 
+            a digital visit hit counter, and 88x31 web badges.
           </p>
         </div>
 
@@ -264,9 +259,9 @@
             <span class="badge badge-react">Query Component</span>
           </h3>
           <p>
-            Implements the search overlay interface. Allows users to choose a category (Sport, Movie, TV), input queries, and POST 
-            requests to the backend <code>/watch</code> endpoint. Contains result parsers to render movie metadata, poster cards 
-            fetched from TMDB, sports vs. match badges, dynamic initials/colors for team fallbacks, and redirects to external streams.
+            Implements the search interface. Configured in a vintage directory search layout similar to AltaVista or Yahoo! 2000. 
+            Allows users to search for Sports, Movies, and TV streams. Displays results as classic web search listings with blue bold 
+            underlined titles, green URL paths, and plain text descriptions.
           </p>
         </div>
 
@@ -315,35 +310,32 @@
     <section class="section">
       <h2>Styling & Sheets Layout</h2>
       <p>
-        Rather than introducing massive component library dependencies or preprocessors, the frontend utilizes optimized custom vanilla CSS. 
-        Each style sheet is mapped directly to components and imported locally:
+        The frontend utilizes custom vanilla CSS to implement the retro Windows XP and Web 1.0 styling with no external preprocessor overhead:
       </p>
 
       <ul>
         <li>
-          <strong><a href="./src/App.css">src/App.css</a>:</strong> Configures global page typography (Plus Jakarta Sans font loading), 
-          header glassmorphism effects (using <code>backdrop-filter</code> and border outlines), flex alignments, navigation buttons active/hover states, 
-          and general responsive spacing constraints.
+          <strong><a href="./src/App.css">src/App.css</a>:</strong> Styles the Windows XP window wrapper chrome (Title Bar, Menu Bar, and Address Bar), 
+          retro index card folder tabs, scrolling marquee banners, neo-green digital visit hit counters, and classic 88x31 web badges.
         </li>
         <li>
-          <strong><a href="./src/styles/QueryPopup.css">src/styles/QueryPopup.css</a>:</strong> Styles the query form layout, category chips, 
-          interactive inputs, loaders, and search result grids. Arranges TMDB movie cards with poster layouts, gradients, overlay titles, and 
-          responsive sports cards.
-          <br>
-          <small style="color: var(--text-muted);">*Note: Although referenced under <code>src/components/styles/</code> in legacy guides, these sheets reside inside <code>src/styles/</code> in the current codebase layout.</small>
+          <strong><a href="./src/styles/QueryPopup.css">src/styles/QueryPopup.css</a>:</strong> Configures the AltaVista/Yahoo! 2000 search engine 
+          directory layouts, including beveled outset chips, inset 3D input boxes, and classic search index style underlined listings.
         </li>
         <li>
           <strong><a href="./src/styles/LiveSports.css">src/styles/LiveSports.css</a>:</strong> Dictates the layout of sports schedules. 
-          Manages upcoming/live badge backgrounds, live status indicator animations (pulsing dot keyframe), team-vs grid divisions, 
-          and channel stream buttons.
+          Manages beveled outset match cards, retro blinking live status animations, and outset play stream buttons.
         </li>
         <li>
           <strong><a href="./src/styles/VideoPlayerModal.css">src/styles/VideoPlayerModal.css</a>:</strong> <em>Cleared / Deprecated.</em> 
           Empty styling sheet associated with the deprecated video player modal.
         </li>
         <li>
-          <strong><a href="./src/styles/Tables.css">src/styles/Tables.css</a>:</strong> Layout and presentation rules for the Tables component. Configures the split-screen workspace grids, auth card formatting, prop selection buttons active states, parlay slip layouts, and keyframe animations for floating update alert cards.
+          <strong><a href="./src/styles/Tables.css">src/styles/Tables.css</a>:</strong> Presentation rules for the Tables component. 
+          Configures the Windows XP Log On Security Dialog box layout, Excel-like spreadsheet tables with solid 1px borders, bold text, 
+          grey headers (#ECE9D8), neo-green LCD balance displays, beveled props selection banners, highlighted strikeouts props with yellow sticky note styling, and square badge tags.
         </li>
+      </ul>
     </section>
 
     <!-- Section 4: Configuration Details -->

@@ -1,11 +1,10 @@
 :root {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  font-family: Tahoma, Arial, "MS Sans Serif", Geneva, sans-serif;
+  line-height: 1.4;
   font-weight: 400;
 
-  color-scheme: dark;
-  background-color: #000000;
-  color: #f8fafc;
+  background-color: #008080;
+  color: #000000;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -18,8 +17,30 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
-  background-color: #000000;
+  background-color: #008080;
+  color: #000000;
+  font-size: 13px;
+}
+
+/* Classic scrollbars */
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ece9d8;
+  box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #fff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ece9d8;
+  border: 2px outset #fff;
+  box-shadow: 1px 1px 0 #000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e1dfd7;
 }
 
 #root {
