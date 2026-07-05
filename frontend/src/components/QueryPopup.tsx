@@ -129,6 +129,26 @@ export default function QueryPopup() {
           </form>
         </div>
 
+        {loading && (
+          <div className="retro-loader-container" style={{ marginTop: "20px" }}>
+            <div className="retro-loader-window">
+              <div className="retro-loader-title-bar">
+                <span className="retro-loader-title">System Status</span>
+                <div className="retro-loader-close">×</div>
+              </div>
+              <div className="retro-loader-body">
+                <p className="retro-loader-text">Searching for streams... Please wait...</p>
+                <div className="retro-progress-bar">
+                  <div className="retro-progress-track">
+                    <div className="retro-progress-block"></div>
+                    <div className="retro-progress-block"></div>
+                    <div className="retro-progress-block"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         {results.length > 0 && (
           <div className="results-wrapper">
             {lastSearchCategory === "sport" ? (
