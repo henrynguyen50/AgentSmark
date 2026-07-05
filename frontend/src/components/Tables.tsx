@@ -61,8 +61,26 @@ interface NotificationItem {
 
 export default function Tables() {
   // Auth state
-  const [token, setToken] = useState<string | null>(localStorage.getItem("tables_token"));
-  const [username, setUsername] = useState<string | null>(localStorage.getItem("tables_username"));
+  // Auth state Helper to clean corrupted / invalid storage values
+  const getStoredToken = (): string | null => {
+    const t = localStorage.getItem("tables_token");
+    if (!t || t === "null" || t === "undefined") {
+      localStorage.removeItem("tables_token");
+      return null;
+    }
+    return t;
+  };
+  const getStoredUsername = (): string | null => {
+    const u = localStorage.getItem("tables_username");
+    if (!u || u === "null" || u === "undefined") {
+      localStorage.removeItem("tables_username");
+      return null;
+    }
+    return u;
+  };
+
+  const [token, setToken] = useState<string | null>(getStoredToken());
+  const [username, setUsername] = useState<string | null>(getStoredUsername());
   const [balance, setBalance] = useState<number>(0);
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
   const [usernameInput, setUsernameInput] = useState("");
@@ -293,13 +311,18 @@ export default function Tables() {
         return;
       }
 
+      if (!data.token || typeof data.token !== "string" || data.token.trim() === "" || data.token === "null" || data.token === "undefined") {
+        setErrorMsg("Server did not return a valid session token");
+        return;
+      }
+
       localStorage.setItem("tables_token", data.token);
-      localStorage.setItem("tables_username", data.username);
+      localStorage.setItem("tables_username", data.username || "");
       setToken(data.token);
-      setUsername(data.username);
+      setUsername(data.username || "");
       setUsernameInput("");
       setPasswordInput("");
-      setSuccessMsg(`Welcome, ${data.username}!`);
+      setSuccessMsg(`Welcome, ${data.username || ""}!`);
     } catch (err) {
       console.error("Auth error:", err);
       setErrorMsg("Failed to connect to backend server");
@@ -320,7 +343,7 @@ export default function Tables() {
 
   // Toggle leg in parlay slip
   const handleToggleLeg = (fixture: Fixture, prop: PlayerProp, overUnder: "over" | "under") => {
-    if (!token) {
+    if (!token || token === "null" || token === "undefined") {
       setErrorMsg("Please login to place bets");
       return;
     }
@@ -526,12 +549,12 @@ export default function Tables() {
               {authMode === "login" ? (
                 <p>
                   Need an account?{" "}
-                  <button onClick={() => setAuthMode("register")}>Register here</button>
+                  <button type="button" onClick={() => setAuthMode("register")}>Register here</button>
                 </p>
               ) : (
                 <p>
                   Have an account?{" "}
-                  <button onClick={() => setAuthMode("login")}>Login here</button>
+                  <button type="button" onClick={() => setAuthMode("login")}>Login here</button>
                 </p>
               )}
             </div>
