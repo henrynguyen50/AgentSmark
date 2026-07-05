@@ -641,21 +641,59 @@ export default function Tables() {
                       {/* Redirect to Player Props card */}
                       <div className="props-selection-section">
                         <h4>Wanna Bet?</h4>
-                        <div className="props-empty">
-                          <p style={{ margin: "0 0 16px 0", color: "#94a3b8", fontSize: "14px", lineHeight: "1.5" }}>
-                            Player props betting is now located in the dedicated <strong>Player Props</strong> tab!
-                          </p>
-                          <button
-                            className="watch-bet-action"
-                            style={{ width: "100%" }}
-                            onClick={() => {
-                              setSelectedPropsFixture(selectedFixture);
-                              setCurrentTab("props");
-                            }}
-                          >
-                            Go to Player Props
-                          </button>
-                        </div>
+                        {selectedFixture.player_props && selectedFixture.player_props.length > 0 ? (
+                          <div className="props-scroller">
+                            {selectedFixture.player_props.map((prop, propIdx) => {
+                              const legInSlip = parlaySlip.find(
+                                (leg) =>
+                                  leg.fixture_title === selectedFixture.title &&
+                                  leg.player_name === prop.player_name &&
+                                  leg.prop_type === prop.prop_type
+                              );
+
+                              const propLower = prop.prop_type.toLowerCase();
+                              const isStrikeoutsProp = propLower.includes("strikeout") || propLower.includes("pitching");
+                              return (
+                                <div 
+                                  key={propIdx} 
+                                  className={`prop-selection-row ${isStrikeoutsProp ? "strikeouts-prop" : ""}`}
+                                >
+                                  <div className="prop-row-left">
+                                    <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                                      <span className="prop-player-name">{prop.player_name}</span>
+                                      <span className={`prop-badge ${isStrikeoutsProp ? "strikeouts-badge" : "regular-badge"}`}>
+                                        {isStrikeoutsProp ? "⭐ " : ""}{prop.prop_type}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div className="prop-row-right">
+                                    <div className="prop-line-value">{prop.line}</div>
+                                    <div className="prop-selection-buttons">
+                                      <button
+                                        className={`prop-bet-btn ${legInSlip?.over_under === "over" ? "active" : ""}`}
+                                        onClick={() => handleToggleLeg(selectedFixture, prop, "over")}
+                                      >
+                                        Over
+                                      </button>
+                                      <button
+                                        className={`prop-bet-btn ${legInSlip?.over_under === "under" ? "active" : ""}`}
+                                        onClick={() => handleToggleLeg(selectedFixture, prop, "under")}
+                                      >
+                                        Under
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <div className="props-empty">
+                            <p style={{ margin: "0", color: "#94a3b8", fontSize: "14px" }}>
+                              No player props available for this game.
+                            </p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -753,7 +791,7 @@ export default function Tables() {
                       return (
                         <div className="fixtures-props-column" style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "12px" }}>
                           {allPlayerProps.map((prop, propIdx) => {
-                            const gameStarted = prop.fixtureStartTime > 0 && Date.now() >= prop.fixtureStartTime;
+                            const gameStarted = false;
                             const legInSlip = parlaySlip.find(
                               (leg) =>
                                 leg.fixture_title === prop.fixtureTitle &&
