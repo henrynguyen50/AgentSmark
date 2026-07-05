@@ -1,374 +1,130 @@
-/* Y2K / AltaVista Search Styles */
-
+/* Custom application field wrapper - matching image_611341.png */
 .query-flow-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
+  gap: 12px; /* Denses up the stacking space between cards */
 }
 
-.popup-overlay {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  background: transparent;
-  width: 100%;
-  box-sizing: border-box;
-}
-
+/* Base application row background frame */
 .popup-container {
-  background-color: #ece9d8;
-  border: 2px outset #ffffff;
-  padding: 15px;
+  background-color: #c0c0c0;
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #808080;
+  border-bottom: 2px solid #808080;
+  padding: 10px 12px;
+  box-shadow: 1px 1px 1px #404040;
+  box-sizing: border-box;
   width: 100%;
+}
+
+/* Cleans out any weird absolute centered overlays */
+.popup-overlay {
+  display: block;
+  width: 100%;
+  padding: 0;
   box-sizing: border-box;
 }
 
+/* Master internal row structure */
 .center-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
 }
 
+/* Category selectors setup styled as labels */
 .category-chips {
   display: flex;
   gap: 6px;
-  justify-content: center;
+  margin-bottom: 2px;
 }
 
 .category-chip {
   padding: 4px 12px;
-  border: 2px outset #ffffff;
-  background-color: #ece9d8;
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #808080;
+  border-bottom: 2px solid #808080;
+  background-color: #c0c0c0;
   color: #000000;
   cursor: pointer;
   font-size: 11px;
   font-weight: bold;
-  font-family: Tahoma, Arial, sans-serif;
-}
-
-.category-chip:hover {
-  background-color: #f1efe2;
+  font-family: Arial, sans-serif;
 }
 
 .category-chip.active {
-  background-color: #ffffff;
-  border: 2px inset #ffffff;
-  box-shadow: none;
-  color: #000000;
+  background-color: #e0e0e0;
+  border-top: 2px solid #808080;
+  border-left: 2px solid #808080;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
 }
 
+/* Classic deep inset text input field */
+.main-input {
+  width: 100%;
+  height: 26px;
+  background-color: #ffffff;
+  border-top: 2px solid #707070;
+  border-left: 2px solid #707070;
+  border-bottom: 2px solid #eeeeee;
+  border-right: 2px solid #eeeeee;
+  padding: 0 6px;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  color: #000000;
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* Input row wrapping adjustments */
 .input-wrapper {
   display: flex;
-  gap: 6px;
+  flex-direction: column; /* Force submission button below or inside structure cleanly */
+  gap: 8px;
   width: 100%;
 }
 
-.main-input {
-  flex: 1;
-  padding: 5px 8px;
-  background-color: #ffffff;
-  border: 2px inset #ffffff;
-  color: #000000;
-  font-family: Tahoma, Arial, sans-serif;
-  font-size: 12px;
-  outline: none;
-}
-
-.main-input::placeholder {
-  color: #808080;
-}
-
-.main-input:disabled {
-  background-color: #e1dfd7;
-  color: #808080;
-}
-
+/* Inset submission buttons */
 .submit-button {
+  align-self: flex-start;
   padding: 4px 15px;
   font-size: 12px;
   font-weight: bold;
-  font-family: Tahoma, Arial, sans-serif;
-  background-color: #ece9d8;
+  font-family: Arial, sans-serif;
+  background-color: #c0c0c0;
   color: #000000;
-  border: 2px outset #ffffff;
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #808080;
+  border-bottom: 2px solid #808080;
   cursor: pointer;
 }
 
-.submit-button:hover:not(:disabled) {
-  background-color: #f1efe2;
+.submit-button:active {
+  border-top: 2px solid #808080;
+  border-left: 2px solid #808080;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
 }
 
-.submit-button:disabled {
-  color: #808080;
-  cursor: not-allowed;
-}
-
+/* Submission/System text below inputs */
 .agent-message {
-  color: #cc0000;
-  font-size: 12px;
-  text-align: center;
+  color: #555555;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  text-align: left;
   margin: 4px 0 0 0;
-  font-weight: bold;
+  font-weight: normal;
 }
 
-/* Results Section (AltaVista Directory Format) */
+/* Outer results wrapper matching the app flow */
 .results-wrapper {
-  margin-top: 20px;
+  margin-top: 15px;
   width: 100%;
-  border-top: 2px dashed #808080;
+  border-top: 2px inset #ffffff;
   padding-top: 15px;
-}
-
-/* TMDB List */
-.tmdb-results-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 100%;
-}
-
-.tmdb-result-card {
-  background-color: #ffffff;
-  border: 1px solid #c0c0c0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  min-height: 120px;
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-}
-
-.tmdb-result-card:hover {
-  background-color: #fafafa;
-  border-color: #808080;
-}
-
-.tmdb-poster-container {
-  position: relative;
-  width: 80px;
-  min-width: 80px;
-  background-color: #ece9d8;
-  border-right: 1px solid #c0c0c0;
-}
-
-.tmdb-poster {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.tmdb-poster-fallback {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 5px;
-  text-align: center;
-  box-sizing: border-box;
-  background-color: #ece9d8;
-  color: #555555;
-}
-
-.fallback-icon {
-  font-size: 20px;
-  margin-bottom: 4px;
-}
-
-.fallback-title {
-  font-size: 9px;
-  font-weight: bold;
-  color: #555555;
-}
-
-.watch-now-button {
-  background-color: #ece9d8;
-  color: #000000;
-  border: 2px outset #ffffff;
-  padding: 4px 10px;
-  font-weight: bold;
-  font-size: 11px;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  text-align: center;
-  font-family: Tahoma, Arial, sans-serif;
-}
-
-.watch-now-button:hover {
-  background-color: #f1efe2;
-}
-
-.tmdb-info {
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  flex-grow: 1;
-}
-
-.tmdb-info .watch-now-button {
-  align-self: flex-start;
-  margin-top: 5px;
-}
-
-.tmdb-title-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.tmdb-title {
-  margin: 0;
-  font-size: 14px;
-  font-weight: bold;
-  color: #0000ee;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.tmdb-title:hover {
-  color: #ff0000;
-}
-
-.tmdb-year {
-  font-size: 11px;
-  font-weight: bold;
-  color: #808080;
-}
-
-.tmdb-overview {
-  margin: 0;
-  font-size: 11px;
-  color: #333333;
-  line-height: 1.3;
-}
-
-/* Sports List */
-.sports-results-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
-
-.sport-result-card {
-  background-color: #ffffff;
-  border: 1px solid #c0c0c0;
-  padding: 10px 15px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-}
-
-.sport-result-card:hover {
-  background-color: #fafafa;
-}
-
-.sport-card-teams {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-}
-
-.sport-card-team {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-}
-
-.sport-card-logo {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-}
-
-.sport-card-fallback {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 10px;
-  color: white;
-}
-
-.sport-card-teamname {
-  font-size: 12px;
-  font-weight: bold;
-  color: #0000ee;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.sport-card-teamname:hover {
-  color: #ff0000;
-}
-
-.sport-card-vs {
-  font-size: 10px;
-  font-weight: bold;
-  color: #cc0000;
-  padding: 2px 4px;
-}
-
-.sport-card-single {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-}
-
-.sport-single-icon {
-  font-size: 16px;
-}
-
-.sport-single-title {
-  font-size: 12px;
-  font-weight: bold;
-  color: #0000ee;
-  text-decoration: underline;
-}
-
-.sport-result-card .watch-now-button {
-  width: auto;
-  white-space: nowrap;
-}
-
-@media (max-width: 768px) {
-  .sport-result-card {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    padding: 10px;
-  }
-  .sport-card-teams {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
-  }
-  .sport-result-card .watch-now-button {
-    width: 100%;
-  }
-  .tmdb-result-card {
-    flex-direction: column;
-  }
-  .tmdb-poster-container {
-    width: 100%;
-    height: 120px;
-  }
 }
