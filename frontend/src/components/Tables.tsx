@@ -75,9 +75,11 @@ export default function Tables() {
   const [currentTab, setCurrentTab] = useState<"lobby" | "props" | "parlays" | "leaderboard">("lobby");
   const [selectedPropsFixture, setSelectedPropsFixture] = useState<Fixture | null>(null);
   const [selectedStreamIdx, setSelectedStreamIdx] = useState<number>(0);
+  const [loadedStreams, setLoadedStreams] = useState<number[]>([0]);
 
   useEffect(() => {
     setSelectedStreamIdx(0);
+    setLoadedStreams([0]);
   }, [selectedFixture]);
 
   // Leaderboard state
@@ -602,20 +604,41 @@ export default function Tables() {
                       <div className="video-player-frame-wrapper" style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                         {selectedFixture.streams && selectedFixture.streams.length > 0 ? (
                           <>
-                            <iframe
-                              src={selectedFixture.streams[selectedStreamIdx]?.embed_url || selectedFixture.streams[0].embed_url}
-                              title={selectedFixture.title}
-                              allowFullScreen
-                              scrolling="no"
-                              className="fixture-embed-iframe"
-                            ></iframe>
+                            <div style={{ position: "relative", width: "100%", flex: 1 }}>
+                              {selectedFixture.streams.map((stream, sIdx) => {
+                                if (!loadedStreams.includes(sIdx)) return null;
+                                return (
+                                  <iframe
+                                    key={sIdx}
+                                    src={stream.embed_url}
+                                    title={`${selectedFixture.title} - Channel ${sIdx + 1}`}
+                                    allowFullScreen
+                                    scrolling="no"
+                                    className="fixture-embed-iframe"
+                                    style={{
+                                      display: selectedStreamIdx === sIdx ? "block" : "none",
+                                      position: "absolute",
+                                      top: 0,
+                                      left: 0,
+                                      width: "100%",
+                                      height: "100%"
+                                    }}
+                                  ></iframe>
+                                );
+                              })}
+                            </div>
                             {selectedFixture.streams.length > 1 && (
                               <div className="stream-selector-tabs" style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "4px" }}>
                                 {selectedFixture.streams.map((stream, sIdx) => (
                                   <button
                                     key={sIdx}
                                     className={`stream-tab-btn ${selectedStreamIdx === sIdx ? "active" : ""}`}
-                                    onClick={() => setSelectedStreamIdx(sIdx)}
+                                    onClick={() => {
+                                      setSelectedStreamIdx(sIdx);
+                                      if (!loadedStreams.includes(sIdx)) {
+                                        setLoadedStreams([...loadedStreams, sIdx]);
+                                      }
+                                    }}
                                     style={{
                                       padding: "6px 12px",
                                       background: selectedStreamIdx === sIdx ? "#3b82f6" : "rgba(255, 255, 255, 0.05)",
@@ -713,7 +736,24 @@ export default function Tables() {
                     </div>
 
                     {loading ? (
-                      <div className="lobby-feedback">Loading fixtures...</div>
+                      <div className="retro-loader-container">
+                        <div className="retro-loader-window">
+                          <div className="retro-loader-title-bar">
+                            <span className="retro-loader-title">System Status</span>
+                            <div className="retro-loader-close">×</div>
+                          </div>
+                          <div className="retro-loader-body">
+                            <p className="retro-loader-text">Loading fixtures and player props. Please wait...</p>
+                            <div className="retro-progress-bar">
+                              <div className="retro-progress-track">
+                                <div className="retro-progress-block"></div>
+                                <div className="retro-progress-block"></div>
+                                <div className="retro-progress-block"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     ) : filteredFixtures.filter(isFixtureActiveStream).length > 0 ? (
                       <div className="fixtures-lobby-grid">
                         {filteredFixtures.filter(isFixtureActiveStream).map((fixture, idx) => {
@@ -771,7 +811,24 @@ export default function Tables() {
                   )}
 
                   {loading ? (
-                    <div className="lobby-feedback">Loading fixtures...</div>
+                    <div className="retro-loader-container">
+                      <div className="retro-loader-window">
+                        <div className="retro-loader-title-bar">
+                          <span className="retro-loader-title">System Status</span>
+                          <div className="retro-loader-close">×</div>
+                        </div>
+                        <div className="retro-loader-body">
+                          <p className="retro-loader-text">Loading fixtures and player props. Please wait...</p>
+                          <div className="retro-progress-bar">
+                            <div className="retro-progress-track">
+                              <div className="retro-progress-block"></div>
+                              <div className="retro-progress-block"></div>
+                              <div className="retro-progress-block"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   ) : (() => {
                     const targetFixtures = selectedPropsFixture 
                       ? filteredFixtures.filter(f => f.title === selectedPropsFixture.title) 
@@ -942,7 +999,24 @@ export default function Tables() {
                   </div>
 
                   {!leaderboard ? (
-                    <div className="lobby-feedback">Loading leaderboard...</div>
+                    <div className="retro-loader-container">
+                      <div className="retro-loader-window">
+                        <div className="retro-loader-title-bar">
+                          <span className="retro-loader-title">System Status</span>
+                          <div className="retro-loader-close">×</div>
+                        </div>
+                        <div className="retro-loader-body">
+                          <p className="retro-loader-text">Loading leaderboard. Please wait...</p>
+                          <div className="retro-progress-bar">
+                            <div className="retro-progress-track">
+                              <div className="retro-progress-block"></div>
+                              <div className="retro-progress-block"></div>
+                              <div className="retro-progress-block"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   ) : (
                     <div className="leaderboard-table-wrapper">
                       <table className="leaderboard-table">

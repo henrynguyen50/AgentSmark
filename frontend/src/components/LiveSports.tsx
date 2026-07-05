@@ -110,9 +110,23 @@ export default function LiveSports() {
       </div>
 
       {loading ? (
-        <div className="loader-container">
-          <div className="premium-loader"></div>
-          <p>Fetching active live sports streams...</p>
+        <div className="retro-loader-container">
+          <div className="retro-loader-window">
+            <div className="retro-loader-title-bar">
+              <span className="retro-loader-title">System Status</span>
+              <div className="retro-loader-close">×</div>
+            </div>
+            <div className="retro-loader-body">
+              <p className="retro-loader-text">Fetching active live sports streams... Please wait...</p>
+              <div className="retro-progress-bar">
+                <div className="retro-progress-track">
+                  <div className="retro-progress-block"></div>
+                  <div className="retro-progress-block"></div>
+                  <div className="retro-progress-block"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       ) : error ? (
         <div className="error-card">
