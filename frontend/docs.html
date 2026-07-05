@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgentSmark Frontend Application Documentation</title>
+  <style>
+    :root {
+      --bg-color: #008080;
+      --card-bg: #ece9d8;
+      --card-hover: #f1efe2;
+      --border-color: #ffffff;
+      --text-main: #000000;
+      --text-muted: #555555;
+      --primary: #000080;
+      --primary-hover: #cc0000;
+      --success: #008000;
+      --warning: #cc6600;
+      --code-bg: #ffffff;
+    }
+
+    body {
+      font-family: Tahoma, Arial, "MS Sans Serif", Geneva, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      line-height: 1.4;
+      font-size: 13px;
+    }
+
+    header {
+      background-color: #ece9d8;
+      border-bottom: 2px solid #808080;
+      padding: 20px;
+      text-align: center;
+      font-family: Tahoma, Arial, sans-serif;
+      box-shadow: inset 0 -1px 0 #ffffff;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+      color: #000080;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    header p {
+      color: #555555;
+      margin-top: 5px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .section {
+      margin-bottom: 50px;
+    }
+
+    .section h2 {
+      font-size: 1.8rem;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 8px;
+      margin-top: 0;
+      margin-bottom: 24px;
+      color: var(--primary);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 2px outset #ffffff;
+      padding: 15px;
+    }
+
+    .card:hover {
+      background-color: var(--card-hover);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card h3 a {
+      color: #0000ee;
+      text-decoration: underline;
+    }
+
+    .card h3 a:hover {
+      color: #ff0000;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--primary-hover);
+      text-decoration: underline;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background-color: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      color: #e2e8f0;
+    }
+
+    pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background-color: var(--code-bg);
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      margin: 16px 0;
+    }
+
+    pre code {
+      background-color: transparent;
+      padding: 0;
+      color: inherit;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 6px;
+      font-size: 9px;
+      font-weight: bold;
+      text-transform: uppercase;
+      border: 1px solid #808080;
+    }
+
+    .badge-react {
+      background-color: #000080;
+      color: #ffffff;
+    }
+
+    .badge-css {
+      background-color: #008000;
+      color: #ffffff;
+    }
+
+    .badge-deprecated {
+      background-color: #cc0000;
+      color: #ffffff;
+    }
+
+    .badge-config {
+      background-color: #e1dfd7;
+      color: #000000;
+    }
+
+    .external-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .external-btn {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .external-btn:hover {
+      background-color: var(--primary);
+      color: var(--bg-color);
+      border-color: var(--primary);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>AgentSmark Frontend Application Documentation</h1>
+    <p>Comprehensive technical manual for the React + TypeScript frontend dashboard client</p>
+  </header>
+
+  <div class="container">
+
+    <!-- Section 1: Overview -->
+    <section class="section">
+      <h2>Application Overview</h2>
+      <p>
+        The <strong>AgentSmark Frontend</strong> is an interactive single-page application client built with 
+        <a href="https://react.dev/" target="_blank">React</a>, <a href="https://www.typescriptlang.org/" target="_blank">TypeScript</a>, 
+        and the <a href="https://vite.dev/" target="_blank">Vite</a> build toolchain. It acts as a user dashboard allowing users to:
+      </p>
+      <ul>
+        <li>Submit natural language searches to find stream feeds for Movies, TV Shows, and Anime via LLM-driven query resolution.</li>
+        <li>Browse real-time listings of live sports events currently broadcasting or scheduled to start, including multi-source link selectors.</li>
+        <li>Monitor analytics and stream availability seamlessly.</li>
+      </ul>
+      <p>
+        To ensure a responsive user experience reminiscent of the classic web era, the client uses a custom visual style system 
+        written in optimized vanilla CSS that emulates the classic Windows XP desktop and browser chrome, retro beveled input fields, 
+        and digital counters. Telemetry and analytics are integrated using Vercel Analytics.
+      </p>
+    </section>
+
+    <!-- Section 2: Codebase Architecture & File Mapping -->
+    <section class="section">
+      <h2>Codebase File Mapping</h2>
+      <p>Click on any of the file links below to view the local source code directly in the repository:</p>
+      
+      <div class="grid">
+        <!-- src/App.tsx -->
+        <div class="card">
+          <h3>
+            <a href="./src/App.tsx">src/App.tsx</a>
+            <span class="badge badge-react">Root Component</span>
+          </h3>
+          <p>
+            The root layout component of the React application. It manages the active tab state, wraps the entire UI inside a 
+            Windows XP window frame mimicking Microsoft Internet Explorer (including a title bar with minimize/maximize/close controls, 
+            a mock menu bar, and an interactive address bar), and renders retro components like a scrolling marquee banner, 
+            a digital visit hit counter, and 88x31 web badges.
+          </p>
+        </div>
+
+        <!-- src/components/QueryPopup.tsx -->
+        <div class="card">
+          <h3>
+            <a href="./src/components/QueryPopup.tsx">src/components/QueryPopup.tsx</a>
+            <span class="badge badge-react">Query Component</span>
+          </h3>
+          <p>
+            Implements the search interface. Configured in a vintage directory search layout similar to AltaVista or Yahoo! 2000. 
+            Allows users to search for Sports, Movies, and TV streams. Displays results as classic web search listings with blue bold 
+            underlined titles, green URL paths, and plain text descriptions.
+          </p>
+        </div>
+
+        <!-- src/components/LiveSports.tsx -->
+        <div class="card">
+          <h3>
+            <a href="./src/components/LiveSports.tsx">src/components/LiveSports.tsx</a>
+            <span class="badge badge-react">Sports Component</span>
+          </h3>
+          <p>
+            Renders active live sports listings. Executes a GET request to the backend <code>/streams</code> endpoint on mount. 
+            Groups fixtures, displays "LIVE" pulses or "UPCOMING" start time tags, provides search filters for filtering teams 
+            (such as Lakers or Chelsea), and displays multiple action buttons linking to alternative stream feeds.
+          </p>
+        </div>
+
+        <!-- src/components/VideoPlayerModal.tsx -->
+        <div class="card">
+          <h3>
+            <a href="./src/components/VideoPlayerModal.tsx">src/components/VideoPlayerModal.tsx</a>
+            <span class="badge badge-deprecated">Deprecated</span>
+          </h3>
+          <p>
+            <em>Cleared / Deprecated.</em> This component was removed from the codebase to bypass iframe constraints, CORS errors, 
+            and media controller bugs on embed sources. Stream links are now resolved in new tabs (<code>target="_blank"</code>), 
+            Cleared / Deprecated. This component was removed from the codebase to bypass iframe constraints, CORS errors, 
+            and media controller bugs on embed sources. Stream links are now resolved in new tabs (<code>target="_blank"</code>), 
+            ensuring full player compatibility.
+          </p>
+        </div>
+
+        <!-- src/components/Tables.tsx -->
+        <div class="card">
+          <h3>
+            <a href="./src/components/Tables.tsx">src/components/Tables.tsx</a>
+            <span class="badge badge-react">Tables Component</span>
+          </h3>
+          <p>
+            Implements the "The Tables" gaming and streaming view. Features register/login forms connecting to FastAPI auth routes, a lobby showing active sports categories (Basketball, Football, Soccer, Baseball) and active streaming fixtures, a Game Station split-screen view with embed iframe player and player props (Over/Under picks), a parlay slip builder for placing 2-5 leg parlays, and active parlay trackers with real-time simulated progress feeds and floating alert cards that update when props increase or settle. Now features a multi-channel stream/channel selector tab system in the Game Station to choose from multiple live broadcast links, and highlights pitching strikeouts / strikeouts props with a premium gold/amber theme (distinct badge, border, and glow effects) to make them prominent in the props selection tab, parlay slip, and placed parlays history list.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Style Sheets & Layout -->
+    <section class="section">
+      <h2>Styling & Sheets Layout</h2>
+      <p>
+        The frontend utilizes custom vanilla CSS to implement the retro Windows XP and Web 1.0 styling with no external preprocessor overhead:
+      </p>
+
+      <ul>
+        <li>
+          <strong><a href="./src/App.css">src/App.css</a>:</strong> Styles the Windows XP window wrapper chrome (Title Bar, Menu Bar, and Address Bar), 
+          retro index card folder tabs, scrolling marquee banners, neo-green digital visit hit counters, and classic 88x31 web badges.
+        </li>
+        <li>
+          <strong><a href="./src/styles/QueryPopup.css">src/styles/QueryPopup.css</a>:</strong> Configures the AltaVista/Yahoo! 2000 search engine 
+          directory layouts, including beveled outset chips, inset 3D input boxes, and classic search index style underlined listings.
+        </li>
+        <li>
+          <strong><a href="./src/styles/LiveSports.css">src/styles/LiveSports.css</a>:</strong> Dictates the layout of sports schedules. 
+          Manages beveled outset match cards, retro blinking live status animations, and outset play stream buttons.
+        </li>
+        <li>
+          <strong><a href="./src/styles/VideoPlayerModal.css">src/styles/VideoPlayerModal.css</a>:</strong> <em>Cleared / Deprecated.</em> 
+          Empty styling sheet associated with the deprecated video player modal.
+        </li>
+        <li>
+          <strong><a href="./src/styles/Tables.css">src/styles/Tables.css</a>:</strong> Presentation rules for the Tables component. 
+          Configures the Windows XP Log On Security Dialog box layout, Excel-like spreadsheet tables with solid 1px borders, bold text, 
+          grey headers (#ECE9D8), neo-green LCD balance displays, beveled props selection banners, highlighted strikeouts props with yellow sticky note styling, and square badge tags.
+        </li>
+      </ul>
+    </section>
+
+    <!-- Section 4: Configuration Details -->
+    <section class="section">
+      <h2>Project Configuration</h2>
+      
+      <h3>1. Vite Build System</h3>
+      <p>
+        Configured via <code><a href="./vite.config.ts">vite.config.ts</a></code>. Leverages Vite's hot module replacement (HMR) 
+        and fast bundlers. Runs the <code>@vitejs/plugin-react</code> plugin for React runtime compilation.
+      </p>
+      
+      <h3>2. Environment Variables</h3>
+      <p>
+        The client interacts with the backend microservice using the following configuration environment variable:
+      </p>
+      <ul>
+        <li><strong><code>VITE_API_BASE_URL</code>:</strong> Specifies the root URL of the running FastAPI backend. If this variable is omitted, the app defaults to <code>https://agent-smark-backend.onrender.com</code>.</li>
+      </ul>
+
+      <h3>3. Tailwind CSS Integration</h3>
+      <p>
+        The project is fully compatible with Tailwind CSS integration using standard Vite plugins. However, the current release uses 
+        custom vanilla styling (found in <code>src/App.css</code> and <code>src/styles/</code>) to maintain zero build-time styling overhead, 
+        maximize rendering speed, and eliminate additional postcss configuration complexity.
+      </p>
+
+      <h3>4. Vercel Analytics</h3>
+      <p>
+        Imported and executed inside <code>App.tsx</code> using the Vercel Analytics SDK (<code>@vercel/analytics</code>). 
+        The call to <code>inject()</code> runs automatically at launch, collecting page views, event tracking, and performance telemetry 
+        when hosted on the Vercel platform.
+      </p>
+    </section>
+
+    <!-- Section 5: External Documentation & Specifications -->
+    <section class="section">
+      <h2>External Documentation & Specifications</h2>
+      <p>Refer to these resources to understand the underlying framework standards, build pipelines, and analytics telemetry:</p>
+      
+      <div class="external-links">
+        <a class="external-btn" href="https://react.dev/" target="_blank">
+          React Documentation
+        </a>
+        <a class="external-btn" href="https://vite.dev/" target="_blank">
+          Vite Config Guide
+        </a>
+        <a class="external-btn" href="https://tailwindcss.com/" target="_blank">
+          Tailwind CSS
+        </a>
+        <a class="external-btn" href="https://www.typescriptlang.org/" target="_blank">
+          TypeScript Handbook
+        </a>
+        <a class="external-btn" href="https://vercel.com/docs/analytics" target="_blank">
+          Vercel Analytics SDK
+        </a>
+      </div>
+    </section>
+
+  </div>
+
+</body>
+</html>
