@@ -1,7 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import "../styles/QueryPopup.css"
+
+declare global {
+  interface Window {
+    triggerAdAction?: (category: string, queryText: string) => void;
+  }
+}
 
 const CATEGORIES = ["Sport", "Movie", "TV"]
 
@@ -24,7 +30,15 @@ export default function QueryPopup() {
   const [agentMessage, setAgentMessage] = useState<string | null>(null)
   const [results, setResults] = useState<StreamResult[]>([])
   const [lastSearchCategory, setLastSearchCategory] = useState<string | null>(null)
-  
+  useEffect(() => {
+    window.triggerAdAction = (category: string, queryText: string) => {
+      setSelectedCategory(category)
+      setInput(queryText)
+    }
+    return () => {
+      window.triggerAdAction = undefined
+    }
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -245,7 +259,7 @@ export default function QueryPopup() {
             )}
           </div>
         )}
-      </div>
     </div>
+  </div>
   )
 }

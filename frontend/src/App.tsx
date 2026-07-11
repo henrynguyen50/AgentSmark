@@ -5,10 +5,29 @@ import LiveSports from "./components/LiveSports"
 import Tables from "./components/Tables"
 import { inject } from '@vercel/analytics'
 
+
+declare global {
+  interface Window {
+    triggerAdAction?: (category: string, queryText: string) => void;
+  }
+}
 inject()
 
 function App() {
   const [activeTab, setActiveTab] = useState<"search" | "live" | "tables">("search")
+  const [closedPopups, setClosedPopups] = useState<Record<string, boolean>>({})
+
+  const closePopup = (id: string) => setClosedPopups(prev => ({ ...prev, [id]: true }))
+  const restoreAllPopups = () => setClosedPopups({})
+
+  const anyAdClosed = Object.keys(closedPopups).some(k => closedPopups[k])
+
+  const handleAdAction = (category: string, queryText: string) => {
+    setActiveTab("search")
+    if (window.triggerAdAction) {
+      window.triggerAdAction(category, queryText)
+    }
+  }
 
   return (
     <div className="app-container">
@@ -213,8 +232,94 @@ function App() {
             <div className="web-badge notepad-badge">Made with Notepad</div>
             <div className="web-badge vite-badge">Vite Powered</div>
             <div className="web-badge valid-badge">HTML 4.01 Valid</div>
+            {anyAdClosed && (
+              <button 
+                onClick={restoreAllPopups} 
+                className="restore-ads-btn"
+                style={{
+                  fontFamily: 'Tahoma, Arial, sans-serif',
+                  fontSize: '11px',
+                  padding: '2px 6px',
+                  marginLeft: '10px',
+                  cursor: 'pointer',
+                  background: '#ece9d8',
+                  border: '1px solid #7f9db9'
+                }}
+              >
+                Restore Closed Ads / Alerts
+              </button>
+            )}
           </div>
         </footer>
+      </div>
+      <div id="popup-layer" aria-hidden="true">
+        {!closedPopups["ad-popup-1"] && (
+          <div className="ad-popup ad-prize is-visible" id="ad-popup-1" style={{ inset: "8px auto auto 1266px", width: "208px", transform: "rotate(0.50487deg)", zIndex: 1005, "--ad-rotate": "0.504870596345619deg" } as React.CSSProperties}>
+            <div className="title-bar">
+              <div className="title-text">🚨 Live Sports Tip! 🚨</div>
+              <div className="title-controls">
+                <span className="control-box ad-close" onClick={() => closePopup("ad-popup-1")}>✕</span>
+              </div>
+            </div>
+            <div className="ad-body" onClick={() => handleAdAction("Sport", "Lakers")}>
+              <div className="ad-blink" style={{ fontSize: "20px", fontWeight: 700, color: "#ff0000", textAlign: "center" }}>🎉 HOT STREAMS! 🎉</div>
+              <div style={{ textAlign: "center", fontSize: "13px", margin: "6px" }}>
+                Don't miss the big game! Search for Sports by entering a<br />
+                <span style={{ fontSize: "18px", fontWeight: 700, color: "#000080" }}>team name</span>
+              </div>
+              <div className="ad-blink" style={{ textAlign: "center", fontWeight: 700, color: "#000080" }}>
+                like <code>Lakers</code> or <code>Man City</code> directly!
+              </div>
+              <span className="tb-btn tb-btn-green" style={{ display: "block", margin: "6px auto", width: "80%", textAlign: "center" }}>👉 CLAIM STREAM! 👈</span>
+            </div>
+          </div>
+        )}
+
+        {!closedPopups["ad-popup-2"] && (
+          <div className="ad-popup ad-perf is-visible" id="ad-popup-2" style={{ inset: "143px auto auto 142px", width: "208px", transform: "rotate(2.85164deg)", zIndex: 1002, "--ad-rotate": "2.8516424118323895deg" } as React.CSSProperties}>
+            <div className="title-bar">
+              <div className="title-text">⚠️ System Alert</div>
+              <div className="title-controls">
+                <span className="control-box ad-close" onClick={() => closePopup("ad-popup-2")}>✕</span>
+              </div>
+            </div>
+            <div className="ad-body" onClick={() => handleAdAction("Movie", "The Furious 2025")}>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <span style={{ fontSize: "24px", color: "#cc0000" }}>⚠️</span>
+                <div style={{ fontWeight: 700, fontSize: "13px" }}>SEARCH BY YEAR!</div>
+              </div>
+              <div style={{ fontSize: "11px", margin: "4px 0" }}>
+                Include the <strong>year</strong> (e.g. <code>The Furious 2025</code> or <code>Inception 2010</code>) to find precise matches! Don't have to do it however!
+              </div>
+              <div style={{ background: "#fff", border: "1px inset #808080", height: "16px", margin: "4px 0" }}>
+                <div className="ad-progress-fill" style={{ background: "linear-gradient(90deg,#000080,#1084d0)", height: "100%" }}></div>
+              </div>
+              <span className="tb-btn" style={{ display: "block", margin: "4px auto", width: "80%", textAlign: "center" }}>🔎 SEARCH 2025</span>
+            </div>
+          </div>
+        )}
+
+        {!closedPopups["ad-popup-3"] && (
+          <div className="ad-popup ad-iq is-visible" id="ad-popup-3" style={{ inset: "88px auto auto 571px", width: "361px", transform: "rotate(1.26686deg)", zIndex: 1007, "--ad-rotate": "1.266855986235969deg" } as React.CSSProperties}>
+            <div className="title-bar">
+              <div className="title-text">🧠 PC IQ Test 2000</div>
+              <div className="title-controls">
+                <span className="control-box ad-close" onClick={() => closePopup("ad-popup-3")}>✕</span>
+              </div>
+            </div>
+            <div className="ad-body" onClick={() => handleAdAction("TV", "attack on titan")}>
+              <div className="ad-blink" style={{ fontSize: "16px", fontWeight: 700, textAlign: "center", color: "#ffd700" }}>⭐ BINGE WATCH HELPER ⭐</div>
+              <div style={{ textAlign: "center", fontSize: "11px", margin: "4px", color: "#fff" }}>
+                TV searches support optional <strong>Season</strong>, <strong>Episode</strong>, and <strong>Year</strong> filters.
+              </div>
+              <div style={{ textAlign: "center", fontSize: "11px", margin: "4px", color: "#fff" }}>
+                • <code>attack on titan</code> (base show)<br />
+                • <code>cyberpunk s1 ep1</code>
+              </div>
+              <span className="tb-btn" style={{ background: "#ffd700", color: "#4a148c", display: "block", margin: "4px auto", width: "70%", textAlign: "center", fontWeight: 700 }}>📺 SEARCH ATTACK ON TITAN</span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

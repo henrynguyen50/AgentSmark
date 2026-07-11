@@ -33,6 +33,8 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 /* Master XP Frame container fixing your image issue */
@@ -42,7 +44,7 @@ html, body {
   border-radius: 4px 4px 0 0;
   box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.4);
   width: 100%;
-  max-width: 1400px;
+  max-width: min(100%, 1400px);
   display: flex;
   flex-direction: column;
 }
@@ -98,6 +100,10 @@ html, body {
   padding: 4px 6px;
   border-bottom: 1px solid #b0b0b0;
   gap: 12px;
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .xp-menu-item {
@@ -117,6 +123,10 @@ html, body {
   padding: 4px 8px;
   border-bottom: 1px solid #b0b0b0;
   gap: 4px;
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .xp-nav-btn {
@@ -188,6 +198,11 @@ html, body {
   background: #f1f0e8;
   cursor: pointer;
 }
+@media (max-width: 600px) {
+  .xp-links-button {
+    display: none;
+  }
+}
 
 /* Toolbars Container Stack */
 .retro-toolbars-stack {
@@ -196,6 +211,9 @@ html, body {
   border-bottom: 1px solid #808080;
   font-family: Tahoma, Arial, sans-serif;
   font-size: 11px;
+  overflow-x: auto;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .toolbar-row {
@@ -509,5 +527,229 @@ html, body {
   }
   100% {
     left: 100%;
+  }
+}
+
+/* --- RETRO AD POPUPS STYLING --- */
+.ad-popup {
+  position: absolute;
+  background: #ece9d8;
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #707070;
+  border-bottom: 2px solid #707070;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+  font-family: Tahoma, Arial, sans-serif;
+  font-size: 11px;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.ad-popup .title-bar {
+  background: linear-gradient(to bottom, #0058e6 0%, #2576f7 10%, #0053e1 30%, #0042c4 85%, #0231a4 100%);
+  color: #ffffff;
+  padding: 3px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 11px;
+  text-shadow: 1px 1px 1px #000;
+  height: 22px;
+}
+
+.ad-popup .title-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ad-popup .title-controls {
+  display: flex;
+  align-items: center;
+}
+
+.ad-popup .control-box.ad-close {
+  background: linear-gradient(to bottom, #f37a5a 0%, #f24d22 30%, #d82400 85%, #ae1e00 100%);
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  font-weight: bold;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 2px;
+  font-size: 9px;
+  box-shadow: inset -1px -1px 1px rgba(0,0,0,0.5);
+  user-select: none;
+}
+
+.ad-popup .control-box.ad-close:hover {
+  filter: brightness(1.1);
+}
+
+.ad-popup .control-box.ad-close:active {
+  filter: brightness(0.9);
+}
+
+.ad-popup .ad-body {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #f1efe2;
+  border: 2px inset #ffffff;
+  margin: 2px;
+  text-decoration: none;
+  color: #000000;
+  cursor: pointer;
+}
+
+.ad-popup.ad-prize .ad-body {
+  background: #ffebf0;
+}
+.ad-popup.ad-iq .ad-body {
+  background: #4a148c;
+  color: #ffffff;
+}
+.ad-popup.ad-dating .ad-body {
+  background: #e91e63;
+  color: #ffffff;
+}
+.ad-popup.ad-survey .ad-body {
+  background: #000080;
+  color: #ffffff;
+}
+
+/* Animations for blink ads */
+.ad-blink {
+  animation: ad-blink-anim 1s infinite;
+}
+
+@keyframes ad-blink-anim {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.ad-progress-fill {
+  animation: progress-fill-anim 3s infinite linear;
+}
+
+@keyframes progress-fill-anim {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+/* LED Indicator */
+.tb-led {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: inset 1px 1px 2px rgba(0,0,0,0.6);
+}
+
+.tb-led-green {
+  background-color: #00ff00;
+  box-shadow: 0 0 4px #00ff00;
+}
+
+/* Buttons style inside ads */
+.tb-btn {
+  font-family: Tahoma, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 3px 10px;
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #707070;
+  border-bottom: 1px solid #707070;
+  background: #ece9d8;
+  color: #000000;
+  cursor: pointer;
+  text-shadow: none;
+}
+
+.tb-btn:active {
+  border-top: 1px solid #707070;
+  border-left: 1px solid #707070;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+}
+
+.tb-btn-green {
+  background: #228b22;
+  color: #ffffff;
+  border-color: #ffffff #005000 #005000 #ffffff;
+}
+
+/* Desktop-specific floating positions */
+@media (min-width: 769px) {
+  #popup-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .ad-popup {
+    pointer-events: auto;
+  }
+
+  #ad-popup-1 {
+    inset: auto 20px 20px auto;
+    width: 208px;
+    transform: rotate(0.50487deg);
+    z-index: 1005;
+  }
+
+  #ad-popup-2 {
+    inset: 143px auto auto 20px;
+    width: 208px;
+    transform: rotate(2.85164deg);
+    z-index: 1002;
+  }
+
+  #ad-popup-3 {
+    inset: 88px auto auto 35%;
+    width: 361px;
+    transform: rotate(1.26686deg);
+    z-index: 1007;
+  }
+}
+
+/* Mobile-specific stacking overrides */
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+  }
+
+  #popup-layer {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    inset: auto !important;
+    margin-top: 20px !important;
+    pointer-events: auto !important;
+  }
+
+  .ad-popup {
+    position: static !important;
+    width: 100% !important;
+    max-width: 340px !important;
+    margin: 10px auto !important;
+    transform: none !important;
+    inset: auto !important;
   }
 }
