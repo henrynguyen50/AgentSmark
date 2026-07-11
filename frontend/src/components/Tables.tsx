@@ -63,17 +63,17 @@ export default function Tables() {
   // Auth state
   // Auth state Helper to clean corrupted / invalid storage values
   const getStoredToken = (): string | null => {
-    const t = localStorage.getItem("tables_token");
+    const t = sessionStorage.getItem("tables_token");
     if (!t || t === "null" || t === "undefined") {
-      localStorage.removeItem("tables_token");
+      sessionStorage.removeItem("tables_token");
       return null;
     }
     return t;
   };
   const getStoredUsername = (): string | null => {
-    const u = localStorage.getItem("tables_username");
+    const u = sessionStorage.getItem("tables_username");
     if (!u || u === "null" || u === "undefined") {
-      localStorage.removeItem("tables_username");
+      sessionStorage.removeItem("tables_username");
       return null;
     }
     return u;
@@ -316,8 +316,8 @@ export default function Tables() {
         return;
       }
 
-      localStorage.setItem("tables_token", data.token);
-      localStorage.setItem("tables_username", data.username || "");
+      sessionStorage.setItem("tables_token", data.token);
+      sessionStorage.setItem("tables_username", data.username || "");
       setToken(data.token);
       setUsername(data.username || "");
       setUsernameInput("");
@@ -330,8 +330,8 @@ export default function Tables() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("tables_token");
-    localStorage.removeItem("tables_username");
+    sessionStorage.removeItem("tables_token");
+    sessionStorage.removeItem("tables_username");
     setToken(null);
     setUsername(null);
     setBalance(0);
