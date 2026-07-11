@@ -47,13 +47,14 @@ export default function QueryPopup() {
         }),
       })
 
+      const searchQuery = input.trim()
       const data = await response.json()
 
       if (data.results && data.results.length > 0) {
         setResults(data.results)
-        setAgentMessage(`${data.results.length} result${data.results.length > 1 ? "s" : ""} found.`)
+        setAgentMessage(`"${searchQuery}" - ${data.results.length} result${data.results.length > 1 ? "s" : ""} found.`)
       } else {
-        setAgentMessage("Sorry, no streams found")
+        setAgentMessage(`"${searchQuery}" - no streams found`)
       }
 
       setInput("")
