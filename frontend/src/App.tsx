@@ -254,14 +254,14 @@ function App() {
       </div>
       <div id="popup-layer" aria-hidden="true">
         {!closedPopups["ad-popup-1"] && (
-          <div className="ad-popup ad-prize is-visible" id="ad-popup-1" style={{ inset: "8px auto auto 1266px", width: "208px", transform: "rotate(0.50487deg)", zIndex: 1005, "--ad-rotate": "0.504870596345619deg" } as React.CSSProperties}>
+          <div className="ad-popup ad-prize is-visible" id="ad-popup-1" style={{ inset: "12% auto auto 3%", width: "208px", transform: "rotate(-1deg)", zIndex: 1005, "--ad-rotate": "-1deg" } as React.CSSProperties}>
             <div className="title-bar">
               <div className="title-text">🚨 Live Sports Tip! 🚨</div>
               <div className="title-controls">
                 <span className="control-box ad-close" onClick={() => closePopup("ad-popup-1")}>✕</span>
               </div>
             </div>
-            <div className="ad-body" onClick={() => handleAdAction("Sport", "Lakers")}>
+            <div className="ad-body" onClick={() => handleAdAction("Sports", "Lakers")}>
               <div className="ad-blink" style={{ fontSize: "20px", fontWeight: 700, color: "#ff0000", textAlign: "center" }}>🎉 HOT STREAMS! 🎉</div>
               <div style={{ textAlign: "center", fontSize: "13px", margin: "6px" }}>
                 Don't miss the big game! Search for Sports by entering a<br />
@@ -276,7 +276,7 @@ function App() {
         )}
 
         {!closedPopups["ad-popup-2"] && (
-          <div className="ad-popup ad-perf is-visible" id="ad-popup-2" style={{ inset: "143px auto auto 142px", width: "208px", transform: "rotate(2.85164deg)", zIndex: 1002, "--ad-rotate": "2.8516424118323895deg" } as React.CSSProperties}>
+          <div className="ad-popup ad-perf is-visible" id="ad-popup-2" style={{ inset: "52% auto auto 3%", width: "208px", transform: "rotate(3deg)", zIndex: 1002, "--ad-rotate": "3deg" } as React.CSSProperties}>
             <div className="title-bar">
               <div className="title-text">⚠️ System Alert</div>
               <div className="title-controls">
@@ -300,7 +300,7 @@ function App() {
         )}
 
         {!closedPopups["ad-popup-3"] && (
-          <div className="ad-popup ad-iq is-visible" id="ad-popup-3" style={{ inset: "88px auto auto 571px", width: "361px", transform: "rotate(1.26686deg)", zIndex: 1007, "--ad-rotate": "1.266855986235969deg" } as React.CSSProperties}>
+          <div className="ad-popup ad-iq is-visible" id="ad-popup-3" style={{ inset: "10% 3% auto auto", width: "361px", transform: "rotate(-2deg)", zIndex: 1007, "--ad-rotate": "-2deg" } as React.CSSProperties}>
             <div className="title-bar">
               <div className="title-text">🧠 PC IQ Test 2000</div>
               <div className="title-controls">
@@ -317,6 +317,24 @@ function App() {
                 • <code>cyberpunk s1 ep1</code>
               </div>
               <span className="tb-btn" style={{ background: "#ffd700", color: "#4a148c", display: "block", margin: "4px auto", width: "70%", textAlign: "center", fontWeight: 700 }}>📺 SEARCH ATTACK ON TITAN</span>
+            </div>
+          </div>
+        )}
+
+        {!closedPopups["ad-popup-4"] && (
+          <div className="ad-popup ad-dating is-visible" id="ad-popup-4" style={{ inset: "48% 3% auto auto", width: "300px", transform: "rotate(1.5deg)", zIndex: 1006, "--ad-rotate": "1.5deg" } as React.CSSProperties}>
+            <div className="title-bar">
+              <div className="title-text">🔥 STREAM LIVE SPORTS FREE 🔥</div>
+              <div className="title-controls">
+                <span className="control-box ad-close" onClick={() => closePopup("ad-popup-4")}>✕</span>
+              </div>
+            </div>
+            <div className="ad-body" onClick={() => setActiveTab("live")}>
+              <div className="ad-blink" style={{ fontSize: "16px", fontWeight: 700, color: "#ff00ff", textAlign: "center" }}>⚡ LIVE BROADCASTS ⚡</div>
+              <div style={{ textAlign: "center", fontSize: "12px", margin: "6px" }}>
+                Want to watch live sports? We have NFL, NBA, Premier League, MLB & more!
+              </div>
+              <span className="tb-btn" style={{ background: "#39ff14", color: "#000", display: "block", margin: "6px auto", width: "80%", textAlign: "center", fontWeight: 700 }}>📺 GO TO LIVE SPORTS 📺</span>
             </div>
           </div>
         )}

@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-const CATEGORIES = ["Sport", "Movie", "TV"]
+const CATEGORIES = ["Movie", "TV", "Sports"]
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://agent-smark-backend.onrender.com";
 
@@ -32,7 +32,11 @@ export default function QueryPopup() {
   const [lastSearchCategory, setLastSearchCategory] = useState<string | null>(null)
   useEffect(() => {
     window.triggerAdAction = (category: string, queryText: string) => {
-      setSelectedCategory(category)
+      let mappedCategory = category
+      if (category.toLowerCase() === "sport") {
+        mappedCategory = "Sports"
+      }
+      setSelectedCategory(mappedCategory)
       setInput(queryText)
     }
     return () => {
@@ -48,7 +52,10 @@ export default function QueryPopup() {
     setAgentMessage("Searching for streams...")
     setResults([])
     
-    const categoryLower = selectedCategory.toLowerCase()
+    let categoryLower = selectedCategory.toLowerCase()
+    if (categoryLower === "sports") {
+      categoryLower = "sport"
+    }
     setLastSearchCategory(categoryLower)
 
     try {
@@ -123,7 +130,7 @@ export default function QueryPopup() {
                 type="text"
                 placeholder={
                   selectedCategory 
-                    ? `Search for ${selectedCategory === "Sport" ? "a match or team" : `a ${selectedCategory.toLowerCase()}`}...` 
+                    ? `Search for ${selectedCategory === "Sports" ? "a match or team" : `a ${selectedCategory.toLowerCase()}`}...` 
                     : "First select a category above..."
                 }
                 value={input}
