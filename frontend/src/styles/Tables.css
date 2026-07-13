@@ -1118,3 +1118,37 @@
   font-weight: bold;
   margin-left: 6px;
 }
+
+/* Props Search Bar Styles */
+.props-search-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ece9d8;
+  border: 2px outset #ffffff;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+}
+
+.props-search-label {
+  font-size: 11px;
+  font-weight: bold;
+  color: #333333;
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+.props-search-input {
+  flex: 1;
+  background-color: #ffffff;
+  border: 2px inset #ffffff;
+  padding: 4px 8px;
+  color: #000000;
+  font-size: 12px;
+  font-family: Tahoma, Arial, sans-serif;
+  outline: none;
+}
+
+.props-search-input:focus {
+  border-color: #316ac5;
+}
+

@@ -94,6 +94,7 @@ export default function Tables() {
   const [selectedPropsFixture, setSelectedPropsFixture] = useState<Fixture | null>(null);
   const [selectedStreamIdx, setSelectedStreamIdx] = useState<number>(0);
   const [loadedStreams, setLoadedStreams] = useState<number[]>([0]);
+  const [propsSearchQuery, setPropsSearchQuery] = useState("");
 
   useEffect(() => {
     setSelectedStreamIdx(0);
@@ -819,6 +820,25 @@ export default function Tables() {
                     ))}
                   </div>
 
+                  <div className="props-search-container">
+                    <span className="props-search-label">Search Props:</span>
+                    <input
+                      type="text"
+                      className="props-search-input"
+                      placeholder="Search by player, team, or prop..."
+                      value={propsSearchQuery}
+                      onChange={(e) => setPropsSearchQuery(e.target.value)}
+                    />
+                    {propsSearchQuery && (
+                      <button
+                        onClick={() => setPropsSearchQuery("")}
+                        className="props-filter-btn"
+                      >
+                        Clear
+                      </button>
+                    )}
+                  </div>
+
                   {selectedPropsFixture && (
                     <div className="props-filter-banner">
                       <span className="props-filter-text">
@@ -867,10 +887,22 @@ export default function Tables() {
                       }))
                     );
 
-                    if (allPlayerProps.length > 0) {
+                    const filteredPlayerProps = allPlayerProps.filter(prop => {
+                      if (!propsSearchQuery) return true;
+                      const query = propsSearchQuery.toLowerCase().trim();
+                      if (!query) return true;
+                      
+                      const nameMatch = (prop.player_name || "").toLowerCase().includes(query);
+                      const teamMatch = (prop.fixtureTitle || "").toLowerCase().includes(query);
+                      const propMatch = (prop.prop_type || "").toLowerCase().includes(query);
+                      
+                      return nameMatch || teamMatch || propMatch;
+                    });
+
+                    if (filteredPlayerProps.length > 0) {
                       return (
                         <div className="fixtures-props-column" style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "12px" }}>
-                          {allPlayerProps.map((prop, propIdx) => {
+                          {filteredPlayerProps.map((prop, propIdx) => {
                             const gameStarted = false;
                             const legInSlip = parlaySlip.find(
                               (leg) =>
@@ -928,7 +960,9 @@ export default function Tables() {
                     } else {
                       return (
                         <div className="props-empty">
-                          No player props available for the selected category
+                          {allPlayerProps.length === 0
+                            ? "No player props available for the selected category"
+                            : "No player props match your search"}
                         </div>
                       );
                     }
