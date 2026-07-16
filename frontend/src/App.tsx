@@ -289,7 +289,7 @@ function App() {
                 <div style={{ fontWeight: 700, fontSize: "13px" }}>SEARCH BY YEAR!</div>
               </div>
               <div style={{ fontSize: "11px", margin: "4px 0" }}>
-                Include the <strong>year</strong> (e.g. <code>The Furious 2025</code> or <code>Inception 2010</code>) to find precise matches! Don't have to do it however!
+                Include the <strong>year</strong> (e.g. <code>The Furious 2026</code> or <code>Inception 2010</code>) to find precise matches! Don't have to do it however!
               </div>
               <div style={{ background: "#fff", border: "1px inset #808080", height: "16px", margin: "4px 0" }}>
                 <div className="ad-progress-fill" style={{ background: "linear-gradient(90deg,#000080,#1084d0)", height: "100%" }}></div>
