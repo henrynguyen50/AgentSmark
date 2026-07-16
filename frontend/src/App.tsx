@@ -254,7 +254,7 @@ function App() {
       </div>
       <div id="popup-layer" aria-hidden="true">
         {!closedPopups["ad-popup-1"] && (
-          <div className="ad-popup ad-prize is-visible" id="ad-popup-1" style={{ inset: "12% auto auto 3%", width: "208px", transform: "rotate(-1deg)", zIndex: 1005, "--ad-rotate": "-1deg" } as React.CSSProperties}>
+          <div className="ad-popup ad-prize is-visible" id="ad-popup-1" style={{ inset: "12% auto auto 5%", width: "208px", transform: "rotate(-1deg)", zIndex: 1005, "--ad-rotate": "-1deg" } as React.CSSProperties}>
             <div className="title-bar">
               <div className="title-text">🚨 Live Sports Tip! 🚨</div>
               <div className="title-controls">
@@ -276,14 +276,14 @@ function App() {
         )}
 
         {!closedPopups["ad-popup-2"] && (
-          <div className="ad-popup ad-perf is-visible" id="ad-popup-2" style={{ inset: "52% auto auto 3%", width: "208px", transform: "rotate(3deg)", zIndex: 1002, "--ad-rotate": "3deg" } as React.CSSProperties}>
+          <div className="ad-popup ad-perf is-visible" id="ad-popup-2" style={{ inset: "52% auto auto 5%", width: "208px", transform: "rotate(3deg)", zIndex: 1002, "--ad-rotate": "3deg" } as React.CSSProperties}>
             <div className="title-bar">
               <div className="title-text">⚠️ System Alert</div>
               <div className="title-controls">
                 <span className="control-box ad-close" onClick={() => closePopup("ad-popup-2")}>✕</span>
               </div>
             </div>
-            <div className="ad-body" onClick={() => handleAdAction("Movie", "The Furious 2025")}>
+            <div className="ad-body" onClick={() => handleAdAction("Movie", "The Furious 2026")}>
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                 <span style={{ fontSize: "24px", color: "#cc0000" }}>⚠️</span>
                 <div style={{ fontWeight: 700, fontSize: "13px" }}>SEARCH BY YEAR!</div>
@@ -300,7 +300,7 @@ function App() {
         )}
 
         {!closedPopups["ad-popup-3"] && (
-          <div className="ad-popup ad-iq is-visible" id="ad-popup-3" style={{ inset: "10% 3% auto auto", width: "361px", transform: "rotate(-2deg)", zIndex: 1007, "--ad-rotate": "-2deg" } as React.CSSProperties}>
+          <div className="ad-popup ad-iq is-visible" id="ad-popup-3" style={{ inset: "10% 5% auto auto", width: "361px", transform: "rotate(-2deg)", zIndex: 1007, "--ad-rotate": "-2deg" } as React.CSSProperties}>
             <div className="title-bar">
               <div className="title-text">🧠 PC IQ Test 2000</div>
               <div className="title-controls">
@@ -322,7 +322,7 @@ function App() {
         )}
 
         {!closedPopups["ad-popup-4"] && (
-          <div className="ad-popup ad-dating is-visible" id="ad-popup-4" style={{ inset: "48% 3% auto auto", width: "300px", transform: "rotate(1.5deg)", zIndex: 1006, "--ad-rotate": "1.5deg" } as React.CSSProperties}>
+          <div className="ad-popup ad-dating is-visible" id="ad-popup-4" style={{ inset: "48% 5% auto auto", width: "300px", transform: "rotate(1.5deg)", zIndex: 1006, "--ad-rotate": "1.5deg" } as React.CSSProperties}>
             <div className="title-bar">
               <div className="title-text">🔥 STREAM LIVE SPORTS FREE 🔥</div>
               <div className="title-controls">
