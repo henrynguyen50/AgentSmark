@@ -78,7 +78,14 @@ export default function LiveSports() {
 
   const filteredFixtures = fixtures.filter((f) => {
     const matchesSearch = f.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesSport = selectedSport === "all" || (f.sport && f.sport.toLowerCase() === selectedSport.toLowerCase());
+    let matchesSport = false;
+    if (selectedSport === "all") {
+      matchesSport = true;
+    } else if (selectedSport === "soccer" || selectedSport === "football") {
+      matchesSport = !!(f.sport && (f.sport.toLowerCase() === "soccer" || f.sport.toLowerCase() === "football"));
+    } else {
+      matchesSport = !!(f.sport && f.sport.toLowerCase() === selectedSport.toLowerCase());
+    }
     return matchesSearch && matchesSport;
   });
 
@@ -98,13 +105,17 @@ export default function LiveSports() {
       </div>
       
       <div className="sport-category-scroller">
-        {["all", "basketball", "football", "soccer", "baseball"].map((sport) => (
+        {["all", "basketball", "football", "soccer", "american-football", "baseball"].map((sport) => (
           <button
             key={sport}
             className={`sport-tab-btn ${selectedSport === sport ? "active" : ""}`}
             onClick={() => setSelectedSport(sport)}
           >
-            {sport === "all" ? "All Sports" : sport.charAt(0).toUpperCase() + sport.slice(1)}
+            {sport === "all"
+              ? "All Sports"
+              : sport === "american-football"
+              ? "NFL"
+              : sport.charAt(0).toUpperCase() + sport.slice(1)}
           </button>
         ))}
       </div>

@@ -452,8 +452,8 @@ export default function Tables() {
     const now = Date.now();
     let duration = 150 * 60 * 1000;
     const sLower = (sport || "").toLowerCase();
-    if (sLower === "soccer") duration = 120 * 60 * 1000;
-    else if (sLower === "american-football" || sLower === "football") duration = 180 * 60 * 1000;
+    if (sLower === "soccer" || sLower === "football") duration = 120 * 60 * 1000;
+    else if (sLower === "american-football" || sLower === "nfl") duration = 180 * 60 * 1000;
     else if (sLower === "baseball") duration = 180 * 60 * 1000;
 
     if (now < startTime) {
@@ -472,8 +472,8 @@ export default function Tables() {
     const startWindow = fixture.start_time - 30 * 60 * 1000;
     let duration = 150 * 60 * 1000;
     const sLower = (fixture.sport || "").toLowerCase();
-    if (sLower === "soccer") duration = 120 * 60 * 1000;
-    else if (sLower === "american-football" || sLower === "football") duration = 180 * 60 * 1000;
+    if (sLower === "soccer" || sLower === "football") duration = 120 * 60 * 1000;
+    else if (sLower === "american-football" || sLower === "nfl") duration = 180 * 60 * 1000;
     else if (sLower === "baseball") duration = 180 * 60 * 1000;
     const endWindow = fixture.start_time + duration;
     return now >= startWindow && now <= endWindow;
@@ -483,8 +483,8 @@ export default function Tables() {
     if (selectedSport === "all") return true;
     const fSport = f.sport.toLowerCase();
     const sSport = selectedSport.toLowerCase();
-    if (sSport === "football") {
-      return fSport === "football" || fSport === "american-football";
+    if (sSport === "soccer" || sSport === "football") {
+      return fSport === "soccer" || fSport === "football";
     }
     return fSport === sSport;
   });
@@ -748,13 +748,15 @@ export default function Tables() {
                   /* Lobby Fixtures List (only active streams) */
                   <div className="lobby-fixtures-container">
                     <div className="sport-category-scroller">
-                      {["all", "basketball", "football", "soccer", "baseball"].map((sport) => (
+                      {["all", "basketball", "football", "soccer", "american-football", "baseball"].map((sport) => (
                         <button
                           key={sport}
                           className={`sport-tab-btn ${selectedSport === sport ? "active" : ""}`}
                           onClick={() => setSelectedSport(sport)}
                         >
-                          {sport.charAt(0).toUpperCase() + sport.slice(1)}
+                          {sport === "american-football"
+                            ? "NFL"
+                            : sport.charAt(0).toUpperCase() + sport.slice(1)}
                         </button>
                       ))}
                     </div>
@@ -806,7 +808,7 @@ export default function Tables() {
               {currentTab === "props" && (
                 <div className="lobby-fixtures-container">
                   <div className="sport-category-scroller">
-                    {["all", "basketball", "football", "soccer", "baseball"].map((sport) => (
+                    {["all", "basketball", "football", "soccer", "american-football", "baseball"].map((sport) => (
                       <button
                         key={sport}
                         className={`sport-tab-btn ${selectedSport === sport ? "active" : ""}`}
@@ -815,7 +817,9 @@ export default function Tables() {
                           setSelectedPropsFixture(null);
                         }}
                       >
-                        {sport.charAt(0).toUpperCase() + sport.slice(1)}
+                        {sport === "american-football"
+                          ? "NFL"
+                          : sport.charAt(0).toUpperCase() + sport.slice(1)}
                       </button>
                     ))}
                   </div>
