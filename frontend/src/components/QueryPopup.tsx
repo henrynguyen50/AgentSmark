@@ -24,15 +24,16 @@ interface StreamResult {
 }
 
 interface TrendingItem {
-  id: number
+  id: number | string
   title: string
-  media_type: "movie" | "tv"
+  media_type: "movie" | "tv" | "sport"
   poster_path: string | null
   backdrop_path?: string | null
   overview?: string | null
   release_date?: string | null
   vote_average: number
   embed_url: string
+  sport?: string
 }
 
 export default function QueryPopup() {
@@ -45,8 +46,29 @@ export default function QueryPopup() {
   
   const [trendingItems, setTrendingItems] = useState<TrendingItem[]>([])
   const [trendingLoading, setTrendingLoading] = useState(true)
-  const [isHovered, setIsHovered] = useState(false)
+  const [isTrendingHovered, setIsTrendingHovered] = useState(false)
+  const [isSportsHovered, setIsSportsHovered] = useState(false)
   const trendingScrollRef = useRef<HTMLDivElement>(null)
+  const sportsScrollRef = useRef<HTMLDivElement>(null)
+
+  const movieTvItems = trendingItems.filter(
+    (item) => item.media_type === "movie" || item.media_type === "tv"
+  )
+  const sportsItems = trendingItems.filter(
+    (item) => item.media_type === "sport"
+  )
+
+  const getSportEmoji = (sport: string = "") => {
+    const s = sport.toLowerCase()
+    if (s.includes("basket") || s === "nba") return "🏀"
+    if (s.includes("soccer") || s.includes("football") || s === "laliga" || s === "premier league" || s === "champions league") return "⚽"
+    if (s.includes("nfl") || s.includes("gridiron") || s.includes("american football")) return "🏈"
+    if (s.includes("baseball") || s === "mlb") return "⚾"
+    if (s.includes("fight") || s.includes("ufc") || s.includes("mma") || s.includes("boxing")) return "🥊"
+    if (s.includes("tennis")) return "🎾"
+    if (s.includes("golf")) return "⛳"
+    return "🏆"
+  }
 
   useEffect(() => {
     let active = true
@@ -74,7 +96,7 @@ export default function QueryPopup() {
   }, [])
 
   useEffect(() => {
-    if (trendingItems.length === 0 || isHovered) return
+    if (movieTvItems.length === 0 || isTrendingHovered) return
 
     const container = trendingScrollRef.current
     if (!container) return
@@ -91,23 +113,36 @@ export default function QueryPopup() {
     return () => {
       clearInterval(intervalId)
     }
-  }, [trendingItems, isHovered])
+  }, [movieTvItems, isTrendingHovered])
 
-  const scrollTrending = (direction: "left" | "right") => {
-    const container = trendingScrollRef.current
+  useEffect(() => {
+    if (sportsItems.length === 0 || isSportsHovered) return
+
+    const container = sportsScrollRef.current
+    if (!container) return
+
+    const intervalId = setInterval(() => {
+      if (container) {
+        container.scrollLeft += 1
+        if (container.scrollLeft >= container.scrollWidth - container.clientWidth - 2) {
+          container.scrollLeft = 0
+        }
+      }
+    }, 25)
+
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [sportsItems, isSportsHovered])
+
+  const scrollRow = (ref: React.RefObject<HTMLDivElement | null>, direction: "left" | "right") => {
+    const container = ref.current
     if (!container) return
     const scrollAmount = container.clientWidth * 0.5
-    if (direction === "left") {
-      container.scrollTo({
-        left: container.scrollLeft - scrollAmount,
-        behavior: "smooth"
-      })
-    } else {
-      container.scrollTo({
-        left: container.scrollLeft + scrollAmount,
-        behavior: "smooth"
-      })
-    }
+    container.scrollTo({
+      left: direction === "left" ? container.scrollLeft - scrollAmount : container.scrollLeft + scrollAmount,
+      behavior: "smooth"
+    })
   }
   useEffect(() => {
     window.triggerAdAction = (category: string, queryText: string) => {
@@ -186,6 +221,44 @@ export default function QueryPopup() {
     return `linear-gradient(135deg, hsl(${h}, 70%, 45%) 0%, hsl(${(h + 40) % 360}, 80%, 30%) 100%)`
   }
 
+  const renderSportsThumbnail = (item: TrendingItem) => {
+    const parts = item.title.split(/\s+vs\.?\s+/i)
+    const isVs = parts.length >= 2
+    const team1 = parts[0]?.trim()
+    const team2 = parts[1]?.trim()
+    const emoji = getSportEmoji(item.sport || "")
+    
+    if (isVs) {
+      return (
+        <div 
+          className="trending-card-sport-poster vs-matchup"
+          style={{ background: getTeamColor(item.title) }}
+        >
+          <div className="sport-matchup-initials">
+            <span className="team-initial" style={{ background: getTeamColor(team1) }}>
+              {getTeamInitials(team1)}
+            </span>
+            <span className="vs-divider">VS</span>
+            <span className="team-initial" style={{ background: getTeamColor(team2) }}>
+              {getTeamInitials(team2)}
+            </span>
+          </div>
+          <span className="sport-icon-float">{emoji}</span>
+        </div>
+      )
+    } else {
+      return (
+        <div 
+          className="trending-card-sport-poster single-event"
+          style={{ background: getTeamColor(item.title) }}
+        >
+          <span className="event-title-initials">{getTeamInitials(item.title)}</span>
+          <span className="sport-icon-float">{emoji}</span>
+        </div>
+      )
+    }
+  }
+
   return (
     <div className="popup-overlay">
       <div className="query-flow-container">
@@ -231,17 +304,26 @@ export default function QueryPopup() {
         </div>
 
         {/* Trending Section */}
-        {!trendingLoading && trendingItems.length > 0 && (
+        {!trendingLoading && movieTvItems.length > 0 && (
           <div className="trending-section">
-            <div className="trending-header">
-              <span className="trending-title-text">Trending Movies & TV Shows</span>
+            <div className="trending-header toolbar-row mywebsearch-bar">
+              <div className="toolbar-left">
+                <span className="toolbar-logo">🔍</span>
+                <span className="trending-title-text">MovieLand</span>
+              </div>
+              <div className="toolbar-items">
+                <button type="button" className="toolbar-btn"><span className="btn-icon">🏠</span>Search</button>
+                <button type="button" className="toolbar-btn"><span className="btn-icon">🍿</span>Popcorn</button>
+                <button type="button" className="toolbar-btn"><span className="btn-icon">⭐</span>Favorites</button>
+                <button type="button" className="toolbar-btn"><span className="btn-icon">💬</span>Chat</button>
+              </div>
               <div className="trending-controls">
                 <span className="trending-status-badge">Auto-scrolling (Hover to pause)</span>
                 <div className="trending-nav-buttons">
                   <button 
                     type="button" 
                     className="trending-nav-btn" 
-                    onClick={() => scrollTrending("left")}
+                    onClick={() => scrollRow(trendingScrollRef, "left")}
                     title="Scroll Left"
                   >
                     ◀
@@ -249,7 +331,7 @@ export default function QueryPopup() {
                   <button 
                     type="button" 
                     className="trending-nav-btn" 
-                    onClick={() => scrollTrending("right")}
+                    onClick={() => scrollRow(trendingScrollRef, "right")}
                     title="Scroll Right"
                   >
                     ▶
@@ -260,10 +342,10 @@ export default function QueryPopup() {
             <div 
               className="trending-scroll-container"
               ref={trendingScrollRef}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
+              onMouseEnter={() => setIsTrendingHovered(true)}
+              onMouseLeave={() => setIsTrendingHovered(false)}
             >
-              {trendingItems.map((item) => {
+              {movieTvItems.map((item) => {
                 const rating = item.vote_average ? item.vote_average.toFixed(1) : "0.0"
                 const mediaLabel = item.media_type === "movie" ? "MOVIE" : "TV"
                 return (
@@ -301,6 +383,84 @@ export default function QueryPopup() {
                 )
               })}
             </div>
+          </div>
+        )}
+
+        {!trendingLoading && (
+          <div className="trending-section">
+            <div className="trending-header toolbar-row bonzi-bar">
+              <div className="toolbar-left">
+                <span className="toolbar-logo">🐵</span>
+                <span className="trending-title-text">SportsZone</span>
+              </div>
+              <div className="toolbar-items">
+                <button type="button" className="toolbar-btn"><span className="btn-icon">🍌</span>Bonzi</button>
+                <button type="button" className="toolbar-btn"><span className="btn-icon">🏀</span>Play</button>
+                <button type="button" className="toolbar-btn"><span className="btn-icon">🔴</span>Live</button>
+                <button type="button" className="toolbar-btn"><span className="btn-icon">🎮</span>Arcade</button>
+              </div>
+              {sportsItems.length > 0 && (
+                <div className="trending-controls">
+                  <span className="trending-status-badge">Auto-scrolling (Hover to pause)</span>
+                  <div className="trending-nav-buttons">
+                    <button 
+                      type="button" 
+                      className="trending-nav-btn" 
+                      onClick={() => scrollRow(sportsScrollRef, "left")}
+                      title="Scroll Left"
+                    >
+                      ◀
+                    </button>
+                    <button 
+                      type="button" 
+                      className="trending-nav-btn" 
+                      onClick={() => scrollRow(sportsScrollRef, "right")}
+                      title="Scroll Right"
+                    >
+                      ▶
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+            {sportsItems.length > 0 ? (
+              <div 
+                className="trending-scroll-container"
+                ref={sportsScrollRef}
+                onMouseEnter={() => setIsSportsHovered(true)}
+                onMouseLeave={() => setIsSportsHovered(false)}
+              >
+                {sportsItems.map((item) => {
+                  const mediaLabel = item.sport ? item.sport.toUpperCase() : "SPORTS"
+                  return (
+                    <a
+                      key={item.id}
+                      href={item.embed_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="trending-card"
+                    >
+                      <div className="trending-poster-container">
+                        {renderSportsThumbnail(item)}
+                        <span className="trending-badge media-sport">
+                          {mediaLabel}
+                        </span>
+                        <span className="trending-badge rating-badge">
+                          🔴 LIVE
+                        </span>
+                      </div>
+                      <div className="trending-card-title" title={item.title}>
+                        {item.title}
+                      </div>
+                    </a>
+                  )
+                })}
+              </div>
+            ) : (
+              <div className="trending-empty-state">
+                No active sports streams currently broadcasting
+              </div>
+            )}
           </div>
         )}
 

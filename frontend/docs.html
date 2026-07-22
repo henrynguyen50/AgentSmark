@@ -259,10 +259,18 @@
             <span class="badge badge-react">Query Component</span>
           </h3>
           <p>
-            Implements the search interface. Configured in a vintage directory search layout similar to AltaVista or Yahoo! 2000. 
-            Allows users to search for Sports, Movies, and TV streams. Displays results as classic web search listings with blue bold 
-            underlined titles, green URL paths, and plain text descriptions. Also features the retro Netflix-style Trending row 
-            directly below the search box, which queries the backend for the top 20 movies and TV shows and auto-scrolls them horizontally.
+            Implements the search interface, styled in a vintage Yahoo! 2000 directory layout. Allows users to search for Sports, Movies, and TV streams. Directly below the search box, the component renders two independent, auto-scrolling horizontal carousels:
+          </p>
+          <ul>
+            <li>
+              <strong>Trending Movies & TV Shows:</strong> Displays trending movie and TV show cards.
+            </li>
+            <li>
+              <strong>Live & Upcoming Sports:</strong> Displays active live and upcoming sports stream cards. Each sports card features a retro gradient background displaying the matchup's team initials, floating sport-specific emojis, and a "🔴 LIVE" status badge.
+            </li>
+          </ul>
+          <p>
+            Both rows support independent horizontal auto-scrolling that pauses on hover (using separate hover states and refs), alongside manual navigation buttons. In strict adherence to AGENTS.md Rule 5, the sports carousel renders a clean empty state feedback message (<code>No active sports streams currently broadcasting</code>) when no active sports streams are retrieved from the backend.
           </p>
         </div>
 
