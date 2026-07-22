@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 12px; /* Denses up the stacking space between cards */
+  gap: 1.5%; /* Denses up the stacking space between cards using percentages */
 }
 
 /* Base application row background frame */
@@ -13,7 +13,7 @@
   border-left: 2px solid #ffffff;
   border-right: 2px solid #808080;
   border-bottom: 2px solid #808080;
-  padding: 10px 12px;
+  padding: 2% 2.5%;
   box-shadow: 1px 1px 1px #404040;
   box-sizing: border-box;
   width: 100%;
@@ -37,12 +37,12 @@
 /* Category selectors setup styled as labels */
 .category-chips {
   display: flex;
-  gap: 6px;
-  margin-bottom: 2px;
+  gap: 0.4em;
+  margin-bottom: 0.2em;
 }
 
 .category-chip {
-  padding: 4px 12px;
+  padding: 0.3em 0.8em;
   border-top: 2px solid #ffffff;
   border-left: 2px solid #ffffff;
   border-right: 2px solid #808080;
@@ -50,7 +50,7 @@
   background-color: #c0c0c0;
   color: #000000;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 85%;
   font-weight: bold;
   font-family: Arial, sans-serif;
 }
@@ -66,15 +66,14 @@
 /* Classic deep inset text input field */
 .main-input {
   width: 100%;
-  height: 26px;
+  padding: 0.4em 0.6em;
   background-color: #ffffff;
   border-top: 2px solid #707070;
   border-left: 2px solid #707070;
   border-bottom: 2px solid #eeeeee;
   border-right: 2px solid #eeeeee;
-  padding: 0 6px;
   font-family: Arial, sans-serif;
-  font-size: 13px;
+  font-size: 110%;
   color: #000000;
   outline: none;
   box-sizing: border-box;
@@ -84,15 +83,15 @@
 .input-wrapper {
   display: flex;
   flex-direction: column; /* Force submission button below or inside structure cleanly */
-  gap: 8px;
+  gap: 0.5em;
   width: 100%;
 }
 
 /* Inset submission buttons */
 .submit-button {
   align-self: flex-start;
-  padding: 4px 15px;
-  font-size: 12px;
+  padding: 0.4em 1em;
+  font-size: 90%;
   font-weight: bold;
   font-family: Arial, sans-serif;
   background-color: #c0c0c0;
@@ -586,4 +585,208 @@
     width: 100%;
     margin-top: 15px;
   }
+}
+
+/* --- Trending Section (Netflix-Style Horizontal Scroll Row) --- */
+.trending-section {
+  width: 100%;
+  background-color: #c0c0c0;
+  border-top: 0.15rem solid #ffffff;
+  border-left: 0.15rem solid #ffffff;
+  border-right: 0.15rem solid #808080;
+  border-bottom: 0.15rem solid #808080;
+  box-shadow: 0.1rem 0.1rem 0.1rem #404040;
+  padding: 1.5%;
+  margin-top: 2.5%;
+  margin-bottom: 2.5%;
+  box-sizing: border-box;
+}
+
+.trending-header {
+  background: linear-gradient(to right, #0058e6 0%, #2576f7 20%, #0053e1 50%, #0042c4 85%, #0231a4 100%);
+  padding: 1% 2%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5%;
+  border-bottom: 0.1rem solid #ffffff;
+}
+
+.trending-title-text {
+  color: #ffffff;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  font-size: 110%;
+  text-shadow: 0.1rem 0.1rem 0.1rem #000000;
+}
+
+.trending-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5vw;
+}
+
+.trending-status-badge {
+  background-color: rgba(0, 0, 0, 0.4);
+  color: #00ff00;
+  font-family: monospace;
+  font-size: 85%;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.2rem;
+  border: 0.05rem solid #00ff00;
+}
+
+@media (max-width: 768px) {
+  .trending-status-badge {
+    display: none; /* Hide status badge on small mobile to save space */
+  }
+}
+
+.trending-nav-buttons {
+  display: flex;
+  gap: 0.5vw;
+}
+
+.trending-nav-btn {
+  background-color: #c0c0c0;
+  color: #000000;
+  border-top: 0.15rem solid #ffffff;
+  border-left: 0.15rem solid #ffffff;
+  border-right: 0.15rem solid #808080;
+  border-bottom: 0.15rem solid #808080;
+  font-size: 95%;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.2rem 0.6rem;
+  box-sizing: border-box;
+}
+
+.trending-nav-btn:active {
+  border-top: 0.15rem solid #808080;
+  border-left: 0.15rem solid #808080;
+  border-right: 0.15rem solid #ffffff;
+  border-bottom: 0.15rem solid #ffffff;
+}
+
+.trending-scroll-container {
+  display: flex;
+  gap: 1.5%;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Hide scrollbar Firefox */
+  padding: 1% 0.5%;
+}
+
+.trending-scroll-container::-webkit-scrollbar {
+  display: none; /* Hide scrollbar Chrome/Safari/Webkit */
+}
+
+.trending-card {
+  flex: 0 0 14%; /* ~7 cards visible in container width on desktop */
+  aspect-ratio: 2 / 3;
+  background-color: #c0c0c0;
+  border-top: 0.15rem solid #ffffff;
+  border-left: 0.15rem solid #ffffff;
+  border-right: 0.15rem solid #808080;
+  border-bottom: 0.15rem solid #808080;
+  box-shadow: 0.08rem 0.08rem 0.08rem #404040;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: #000000;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+@media (max-width: 1200px) {
+  .trending-card {
+    flex: 0 0 18%; /* ~5.5 cards visible */
+  }
+}
+
+@media (max-width: 900px) {
+  .trending-card {
+    flex: 0 0 25%; /* 4 cards visible */
+  }
+}
+
+@media (max-width: 600px) {
+  .trending-card {
+    flex: 0 0 42%; /* ~2.4 cards visible */
+  }
+}
+
+
+.trending-card:hover {
+  transform: translateY(-3.5%);
+  border: 0.15rem solid #000080;
+  box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.5);
+}
+
+.trending-poster-container {
+  position: relative;
+  width: 100%;
+  flex-grow: 1;
+  overflow: hidden;
+  background-color: #000000;
+}
+
+.trending-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.trending-poster-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 200%;
+  background-color: #202020;
+}
+
+.trending-badge {
+  position: absolute;
+  font-size: 70%;
+  font-weight: bold;
+  padding: 2% 5%;
+  border: 0.05rem solid #ffffff;
+  color: #ffffff;
+  text-shadow: 0.05rem 0.05rem 0.05rem #000000;
+}
+
+.media-movie {
+  top: 4%;
+  left: 4%;
+  background-color: #cc0000;
+}
+
+.media-tv {
+  top: 4%;
+  left: 4%;
+  background-color: #008000;
+}
+
+.rating-badge {
+  bottom: 4%;
+  right: 4%;
+  background-color: rgba(0, 0, 80, 0.85);
+}
+
+.trending-card-title {
+  width: 100%;
+  padding: 4% 5%;
+  font-size: 85%;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #ece9d8;
+  border-top: 0.1rem solid #808080;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
 }

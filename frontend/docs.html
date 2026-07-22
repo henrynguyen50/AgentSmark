@@ -261,7 +261,8 @@
           <p>
             Implements the search interface. Configured in a vintage directory search layout similar to AltaVista or Yahoo! 2000. 
             Allows users to search for Sports, Movies, and TV streams. Displays results as classic web search listings with blue bold 
-            underlined titles, green URL paths, and plain text descriptions.
+            underlined titles, green URL paths, and plain text descriptions. Also features the retro Netflix-style Trending row 
+            directly below the search box, which queries the backend for the top 20 movies and TV shows and auto-scrolls them horizontally.
           </p>
         </div>
 
@@ -274,7 +275,9 @@
           <p>
             Renders active live sports listings. Executes a GET request to the backend <code>/streams</code> endpoint on mount. 
             Groups fixtures, displays "LIVE" pulses or "UPCOMING" start time tags, provides search filters for filtering teams 
-            (such as Lakers or Chelsea), and displays multiple action buttons linking to alternative stream feeds.
+            (such as Lakers or Chelsea) and categories via a sport category scroller (All Sports, Basketball, Football/Soccer, Soccer, NFL, Baseball), 
+            and displays multiple action buttons linking to alternative stream feeds. The filter logic is configured so that selecting either "Soccer" 
+            or "Football" displays both soccer and football matches, while "NFL" displays "american-football" fixtures.
           </p>
         </div>
 
@@ -300,7 +303,7 @@
             <span class="badge badge-react">Tables Component</span>
           </h3>
           <p>
-            Implements the "The Tables" gaming and streaming view. Features register/login forms connecting to FastAPI auth routes, a lobby showing active sports categories (Basketball, Football, Soccer, Baseball) and active streaming fixtures, a Game Station split-screen view with embed iframe player and player props (Over/Under picks) loaded directly in the "Wanna Bet?" panel, a parlay slip builder for placing 2-5 leg parlays, and active parlay trackers with real-time simulated progress feeds and floating alert cards that update when props increase or settle. Now features a multi-channel stream/channel selector tab system in the Game Station to choose from multiple live broadcast links, and highlights pitching strikeouts / strikeouts props with a premium gold/amber theme (distinct badge, border, and glow effects) to make them prominent in the props selection tab, parlay slip, and placed parlays history list.
+            Implements the "The Tables" gaming and streaming view. Features register/login forms connecting to FastAPI auth routes, a lobby showing active sports categories (Basketball, Football/Soccer, Soccer, NFL, Baseball) and active streaming fixtures, a Game Station split-screen view with embed iframe player and player props (Over/Under picks) loaded directly in the "Wanna Bet?" panel, a player props search/filtering bar to search by player, team, or prop, a parlay slip builder for placing 2-5 leg parlays, and active parlay trackers with real-time simulated progress feeds and floating alert cards that update when props increase or settle. Now features a multi-channel stream/channel selector tab system in the Game Station to choose from multiple live broadcast links, active durations calculated dynamically (120 minutes for Soccer/Football, 180 minutes for NFL/American Football), customized tab category filters showing soccer/football matches on both "Soccer" and "Football" tabs while "NFL" displays "american-football" fixtures, and highlights pitching strikeouts / strikeouts props with a premium gold/amber theme (distinct badge, border, and glow effects) to make them prominent in the props selection tab, parlay slip, and placed parlays history list.
           </p>
         </div>
       </div>
@@ -333,7 +336,7 @@
         <li>
           <strong><a href="./src/styles/Tables.css">src/styles/Tables.css</a>:</strong> Presentation rules for the Tables component. 
           Configures the Windows XP Log On Security Dialog box layout, Excel-like spreadsheet tables with solid 1px borders, bold text, 
-          grey headers (#ECE9D8), neo-green LCD balance displays, beveled props selection banners, highlighted strikeouts props with yellow sticky note styling, and square badge tags.
+          grey headers (#ECE9D8), neo-green LCD balance displays, beveled props selection banners, highlighted strikeouts props with yellow sticky note styling, retro search input styles, and square badge tags.
         </li>
       </ul>
     </section>

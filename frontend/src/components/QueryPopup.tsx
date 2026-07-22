@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import "../styles/QueryPopup.css"
 
 declare global {
@@ -23,6 +23,18 @@ interface StreamResult {
   first_air_date?: string
 }
 
+interface TrendingItem {
+  id: number
+  title: string
+  media_type: "movie" | "tv"
+  poster_path: string | null
+  backdrop_path?: string | null
+  overview?: string | null
+  release_date?: string | null
+  vote_average: number
+  embed_url: string
+}
+
 export default function QueryPopup() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [input, setInput] = useState("")
@@ -30,6 +42,73 @@ export default function QueryPopup() {
   const [agentMessage, setAgentMessage] = useState<string | null>(null)
   const [results, setResults] = useState<StreamResult[]>([])
   const [lastSearchCategory, setLastSearchCategory] = useState<string | null>(null)
+  
+  const [trendingItems, setTrendingItems] = useState<TrendingItem[]>([])
+  const [trendingLoading, setTrendingLoading] = useState(true)
+  const [isHovered, setIsHovered] = useState(false)
+  const trendingScrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    let active = true
+    const fetchTrending = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/trending`)
+        if (response.ok) {
+          const data = await response.json()
+          if (active && data.results) {
+            setTrendingItems(data.results)
+          }
+        }
+      } catch (err) {
+        console.error("Error loading trending content:", err)
+      } finally {
+        if (active) {
+          setTrendingLoading(false)
+        }
+      }
+    }
+    fetchTrending()
+    return () => {
+      active = false
+    }
+  }, [])
+
+  useEffect(() => {
+    if (trendingItems.length === 0 || isHovered) return
+
+    const container = trendingScrollRef.current
+    if (!container) return
+
+    const intervalId = setInterval(() => {
+      if (container) {
+        container.scrollLeft += 1
+        if (container.scrollLeft >= container.scrollWidth - container.clientWidth - 2) {
+          container.scrollLeft = 0
+        }
+      }
+    }, 25)
+
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [trendingItems, isHovered])
+
+  const scrollTrending = (direction: "left" | "right") => {
+    const container = trendingScrollRef.current
+    if (!container) return
+    const scrollAmount = container.clientWidth * 0.5
+    if (direction === "left") {
+      container.scrollTo({
+        left: container.scrollLeft - scrollAmount,
+        behavior: "smooth"
+      })
+    } else {
+      container.scrollTo({
+        left: container.scrollLeft + scrollAmount,
+        behavior: "smooth"
+      })
+    }
+  }
   useEffect(() => {
     window.triggerAdAction = (category: string, queryText: string) => {
       let mappedCategory = category
@@ -151,7 +230,81 @@ export default function QueryPopup() {
           </form>
         </div>
 
-        {loading && (
+        {/* Trending Section */}
+        {!trendingLoading && trendingItems.length > 0 && (
+          <div className="trending-section">
+            <div className="trending-header">
+              <span className="trending-title-text">Trending Movies & TV Shows</span>
+              <div className="trending-controls">
+                <span className="trending-status-badge">Auto-scrolling (Hover to pause)</span>
+                <div className="trending-nav-buttons">
+                  <button 
+                    type="button" 
+                    className="trending-nav-btn" 
+                    onClick={() => scrollTrending("left")}
+                    title="Scroll Left"
+                  >
+                    ◀
+                  </button>
+                  <button 
+                    type="button" 
+                    className="trending-nav-btn" 
+                    onClick={() => scrollTrending("right")}
+                    title="Scroll Right"
+                  >
+                    ▶
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div 
+              className="trending-scroll-container"
+              ref={trendingScrollRef}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              {trendingItems.map((item) => {
+                const rating = item.vote_average ? item.vote_average.toFixed(1) : "0.0"
+                const mediaLabel = item.media_type === "movie" ? "MOVIE" : "TV"
+                return (
+                  <a
+                    key={item.id}
+                    href={item.embed_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="trending-card"
+                  >
+                    <div className="trending-poster-container">
+                      {item.poster_path ? (
+                        <img 
+                          src={`https://image.tmdb.org/t/p/w342${item.poster_path}`} 
+                          alt={item.title} 
+                          className="trending-poster"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="trending-poster-fallback">
+                          <span className="fallback-icon">🎬</span>
+                        </div>
+                      )}
+                      <span className={`trending-badge media-${item.media_type}`}>
+                        {mediaLabel}
+                      </span>
+                      <span className="trending-badge rating-badge">
+                        ⭐ {rating}
+                      </span>
+                    </div>
+                    <div className="trending-card-title" title={item.title}>
+                      {item.title}
+                    </div>
+                  </a>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+         {loading && (
           <div className="retro-loader-container" style={{ marginTop: "20px" }}>
             <div className="retro-loader-window">
               <div className="retro-loader-title-bar">
