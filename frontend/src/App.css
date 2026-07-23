@@ -764,14 +764,15 @@ html, body {
 }
 
 /* Visitor Counter Styling */
-.visitor-counter-wrapper {
+.visitor-counter-wrapper.casino-theme {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  background: #ece9d8;
-  padding: 6px;
-  border-bottom: 1px solid #808080;
+  background: linear-gradient(180deg, #2b0303 0%, #0f0019 100%);
+  padding: 12px;
+  border: 3px solid #ffd700;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4), inset 0 0 10px #000;
   box-sizing: border-box;
 }
 
@@ -779,79 +780,92 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  background: #000000;
-  border: 2px inset #ffffff;
-  padding: 6px 12px;
-  border-radius: 4px;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid #b8860b;
+  padding: 8px 16px;
+  border-radius: 6px;
   flex-wrap: wrap;
+  box-shadow: inset 0 0 8px #000;
 }
 
 .visitor-counter-label {
-  color: #ffcc00;
+  color: #ffe600;
   font-family: "Impact", "Arial Black", sans-serif;
-  font-size: 14px;
-  letter-spacing: 1px;
-  text-shadow: 0 0 4px #ffcc00;
+  font-size: 16px;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 8px #ffaa00, 2px 2px 0 #000;
 }
 
-.digital-display {
+.slot-machine-reels {
   display: flex;
-  gap: 3px;
-  background: #111;
-  padding: 2px;
-  border: 1px inset #808080;
-}
-
-.digital-digit {
+  gap: 4px;
   background: #000;
-  color: #00ff00;
-  font-family: "Courier New", Courier, monospace;
-  font-size: 20px;
+  padding: 4px;
+  border: 2px solid #b8860b;
+  border-radius: 4px;
+  box-shadow: inset 0 0 10px #000;
+}
+
+.slot-digit {
+  background: linear-gradient(180deg, #222 0%, #000 50%, #222 100%);
+  color: #ffe600;
+  font-family: "Impact", "Arial Black", monospace;
+  font-size: 26px;
   font-weight: bold;
-  padding: 2px 6px;
-  border: 1px inset #333;
-  text-shadow: 0 0 5px #00ff00;
+  padding: 4px 10px;
+  border: 1px solid #b8860b;
+  border-radius: 3px;
+  text-shadow: 0 0 8px #ffe600, 1px 1px 0 #000;
+  box-shadow: inset 0 3px 5px rgba(255, 255, 255, 0.1), inset 0 -3px 5px rgba(0, 0, 0, 0.5);
+  display: inline-block;
 }
 
-.visitor-counter-subtext {
-  color: #ffffff;
-  font-family: "Tahoma", sans-serif;
-  font-size: 11px;
+.casino-subtext {
+  color: #ffe600;
+  font-family: "Impact", sans-serif;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-shadow: 0 0 6px #ff5500;
+  animation: casino-pulse 1.5s ease-in-out infinite alternate;
 }
 
-.debug-btn {
-  background: #ece9d8;
-  border: 1px solid #7f9db9;
-  font-size: 10px;
-  cursor: pointer;
-  padding: 2px 6px;
-  height: 20px;
-}
-
-.debug-btn:hover {
-  background: #f0f0f0;
+@keyframes casino-pulse {
+  from {
+    text-shadow: 0 0 6px #ff5500, 0 0 10px #ff0000;
+  }
+  to {
+    text-shadow: 0 0 12px #ffe600, 0 0 20px #ffaa00;
+  }
 }
 
 /* Prize Winner Banner */
-.prize-winner-banner {
-  background: linear-gradient(90deg, #ff0000, #ffcc00, #ff0000);
-  background-size: 200% 200%;
+.casino-jackpot-banner {
+  background: linear-gradient(90deg, #ff0000, #ffcc00, #ff0000, #ffcc00);
+  background-size: 300% 300%;
   color: #ffffff;
   font-family: "Impact", sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   text-align: center;
-  padding: 8px 12px;
+  padding: 10px 16px;
   width: 100%;
   box-sizing: border-box;
   cursor: pointer;
-  border-top: 1px solid #ffcc00;
-  border-bottom: 1px solid #ffcc00;
-  animation: prize-pulse 2s ease infinite;
+  border-top: 3px solid #ffd700;
+  border-bottom: 3px solid #ffd700;
+  box-shadow: 0 0 20px #ffcc00, inset 0 0 10px #ff0000;
+  animation: casinoMarquee 2s linear infinite;
+  margin-top: 10px;
 }
 
-@keyframes prize-pulse {
+.casino-marquee-text {
+  animation: retro-blink 0.5s steps(2, start) infinite;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 4px #000;
+}
+
+@keyframes casinoMarquee {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
@@ -864,4 +878,261 @@ html, body {
 
 @keyframes retro-blink {
   to { visibility: hidden; }
+}
+
+
+/* ==========================================================================
+   Solitaire Theme Styles
+   ========================================================================== */
+
+/* Solitaire Wrapper with Green Felt Background */
+.visitor-counter-wrapper.solitaire-theme {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background: #076324; /* Solid Solitaire green felt */
+  padding: 16px;
+  border: 3px double #004d1a;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.6);
+  box-sizing: border-box;
+}
+
+.solitaire-theme .visitor-counter-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: rgba(0, 77, 26, 0.4);
+  border: 2px solid #004d1a;
+  padding: 10px 20px;
+  border-radius: 4px;
+  flex-wrap: wrap;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.solitaire-theme .visitor-counter-label {
+  color: #ffffff;
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px #000000;
+}
+
+/* Solitaire Card Digit Styling */
+.digital-display.solitaire-reels {
+  display: flex;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.solitaire-card-digit {
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  width: 36px;
+  height: 50px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.card-digit-value, .card-digit-center {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* Support color classes just in case */
+.card-digit-value.red, .card-digit-center.red {
+  color: #ff0000;
+}
+.card-digit-value.black, .card-digit-center.black {
+  color: #000000;
+}
+
+.card-suit-top {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  font-size: 8px;
+  line-height: 1;
+}
+
+.card-suit-bottom {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  font-size: 8px;
+  line-height: 1;
+  transform: rotate(180deg);
+}
+
+.solitaire-subtext {
+  color: #ffffff;
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 13px;
+  text-shadow: 1px 1px 2px #000000;
+  animation: none;
+}
+
+/* Solitaire Milestone Jackpot Banner */
+.solitaire-jackpot-banner {
+  background: #004d1a;
+  border-top: 3px double #ffffff;
+  border-bottom: 3px double #ffffff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px 16px;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+  margin-top: 10px;
+  animation: solitaire-marquee-pulse 2s ease-in-out infinite alternate;
+}
+
+.solitaire-marquee-text {
+  font-family: "Georgia", "Times New Roman", serif;
+  text-shadow: 1px 1px 3px #000000;
+}
+
+@keyframes solitaire-marquee-pulse {
+  from {
+    background-color: #076324;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2), inset 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+  to {
+    background-color: #004d1a;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.4), inset 0 0 15px rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* ==========================================================================
+   Windows Solitaire Prize Modal (Windows 95/98 Classic Beveled Dialog)
+   ========================================================================== */
+
+.prize-modal {
+  border: 2px solid !important;
+  border-color: #ffffff #808080 #808080 #ffffff !important;
+  box-shadow: inset -1px -1px 0px 0px #0a0a0a, inset 1px 1px 0px 0px #dfdfdf, 2px 2px 10px rgba(0, 0, 0, 0.5) !important;
+  font-family: "Tahoma", "Arial", sans-serif !important;
+}
+
+.prize-modal .title-bar {
+  background: #000080 !important;
+  color: #ffffff !important;
+  padding: 3px 4px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.prize-modal .title-text {
+  color: #ffffff !important;
+  font-family: "Tahoma", "Arial", sans-serif !important;
+  font-weight: bold !important;
+  font-size: 13px !important;
+}
+
+.prize-modal .ad-close {
+  color: #000000 !important;
+  border: 1px solid #ffffff !important;
+  background: #c0c0c0 !important;
+  font-size: 11px !important;
+  font-weight: bold !important;
+  box-shadow: inset -1px -1px #000000, inset 1px 1px #ffffff !important;
+  padding: 0 4px !important;
+  cursor: pointer !important;
+}
+
+.prize-modal .ad-body {
+  background: #076324 !important; /* Green felt interior */
+  border: 2px solid !important;
+  border-color: #808080 #ffffff #ffffff #808080 !important; /* Inset border */
+  margin: 4px !important;
+  padding: 20px !important;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Solitaire Winning Hand Card Fan */
+.solitaire-card-fan {
+  display: flex;
+  justify-content: center;
+  margin: 25px 0;
+  height: 90px;
+  position: relative;
+}
+
+.solitaire-fan-card {
+  font-family: "Georgia", "Times New Roman", serif;
+  background: #ffffff !important;
+  border: 1px solid #000000 !important;
+  border-radius: 4px !important;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3) !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4px;
+  box-sizing: border-box;
+  user-select: none;
+  animation: solitaire-cascade 0.5s ease-out both;
+}
+
+.solitaire-fan-card:nth-child(1) { animation-delay: 0.05s; }
+.solitaire-fan-card:nth-child(2) { animation-delay: 0.1s; }
+.solitaire-fan-card:nth-child(3) { animation-delay: 0.15s; }
+.solitaire-fan-card:nth-child(4) { animation-delay: 0.2s; }
+.solitaire-fan-card:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes solitaire-cascade {
+  0% {
+    transform: translateY(20px) scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Classic Windows 95 Beveled Button */
+.solitaire-claim-button {
+  display: block !important;
+  margin: 20px auto 5px !important;
+  width: 95% !important;
+  text-align: center !important;
+  padding: 10px 0 !important;
+  height: auto !important;
+  font-size: 11px !important;
+  font-weight: bold !important;
+  background: #c0c0c0 !important;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #808080 !important;
+  border-bottom: 2px solid #808080 !important;
+  color: #000000 !important;
+  font-family: "Tahoma", "Arial", sans-serif !important;
+  cursor: pointer !important;
+  box-shadow: 1px 1px 0px #000000 !important;
+  outline: none !important;
+}
+
+.solitaire-claim-button:active {
+  border-top: 2px solid #808080 !important;
+  border-left: 2px solid #808080 !important;
+  border-right: 2px solid #ffffff !important;
+  border-bottom: 2px solid #ffffff !important;
+  box-shadow: inset 1px 1px 0px #000000 !important;
 }

@@ -34,10 +34,6 @@ function App() {
     }
   }, [])
 
-  const handleSetTo999 = () => {
-    localStorage.setItem("sfo_visitor_count", "999")
-    setVisitorCount(999)
-  }
 
   const closePopup = (id: string) => setClosedPopups(prev => ({ ...prev, [id]: true }))
   const restoreAllPopups = () => setClosedPopups({})
@@ -214,10 +210,8 @@ function App() {
         {/* Visitor Counter */}
         <VisitorCounter
           visitorCount={visitorCount}
-          onSetTo999={handleSetTo999}
           onShowPrize={() => setShowPrizeModal(true)}
         />
-
         {/* Marquee Banner */}
         <div className="retro-marquee-container">
           {React.createElement(
