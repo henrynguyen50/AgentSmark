@@ -3,6 +3,8 @@ import "./App.css"
 import QueryPopup from "./components/QueryPopup"
 import LiveSports from "./components/LiveSports"
 import Tables from "./components/Tables"
+import VisitorCounter from "./components/VisitorCounter"
+import PrizeModal from "./components/PrizeModal"
 import { inject } from '@vercel/analytics'
 
 
@@ -16,6 +18,26 @@ inject()
 function App() {
   const [activeTab, setActiveTab] = useState<"search" | "live" | "tables">("search")
   const [closedPopups, setClosedPopups] = useState<Record<string, boolean>>({})
+  const [visitorCount, setVisitorCount] = useState<number>(0)
+  const [showPrizeModal, setShowPrizeModal] = useState<boolean>(false)
+
+  React.useEffect(() => {
+    const saved = localStorage.getItem("sfo_visitor_count")
+    let count = saved ? parseInt(saved, 10) : 998
+    if (isNaN(count)) count = 998
+    const newCount = count + 1
+    localStorage.setItem("sfo_visitor_count", String(newCount))
+    setVisitorCount(newCount)
+
+    if (newCount > 0 && newCount % 1000 === 0) {
+      setShowPrizeModal(true)
+    }
+  }, [])
+
+  const handleSetTo999 = () => {
+    localStorage.setItem("sfo_visitor_count", "999")
+    setVisitorCount(999)
+  }
 
   const closePopup = (id: string) => setClosedPopups(prev => ({ ...prev, [id]: true }))
   const restoreAllPopups = () => setClosedPopups({})
@@ -189,6 +211,13 @@ function App() {
           </button>
         </div>
 
+        {/* Visitor Counter */}
+        <VisitorCounter
+          visitorCount={visitorCount}
+          onSetTo999={handleSetTo999}
+          onShowPrize={() => setShowPrizeModal(true)}
+        />
+
         {/* Marquee Banner */}
         <div className="retro-marquee-container">
           {React.createElement(
@@ -253,6 +282,9 @@ function App() {
         </footer>
       </div>
       <div id="popup-layer" aria-hidden="true">
+        {showPrizeModal && (
+          <PrizeModal onClose={() => setShowPrizeModal(false)} />
+        )}
         {!closedPopups["ad-popup-1"] && (
           <div className="ad-popup ad-prize is-visible" id="ad-popup-1" style={{ inset: "12% auto auto 5%", width: "208px", transform: "rotate(-1deg)", zIndex: 1005, "--ad-rotate": "-1deg" } as React.CSSProperties}>
             <div className="title-bar">

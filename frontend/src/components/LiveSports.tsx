@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "../styles/LiveSports.css";
-
+import { N64TeamLogo, N64SportIcon, N64Defs } from "./N64SportsIcons";
+import "../styles/N64SportsIcons.css";
 interface StreamSource {
   source: string;
   source_id: string;
@@ -45,23 +46,6 @@ export default function LiveSports() {
   }, []);
 
 
-  const getTeamInitials = (name: string) => {
-    const clean = name.replace(/[^a-zA-Z0-9\s]/g, "").trim();
-    const words = clean.split(/\s+/);
-    if (words.length >= 2) {
-      return (words[0][0] + words[1][0]).toUpperCase();
-    }
-    return clean.substring(0, 2).toUpperCase();
-  };
-
-  const getTeamColor = (name: string) => {
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-      hash = name.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const h = Math.abs(hash) % 360;
-    return `linear-gradient(135deg, hsl(${h}, 70%, 45%) 0%, hsl(${(h + 40) % 360}, 80%, 30%) 100%)`;
-  };
 
   const formatStartTime = (startTimeMs?: number) => {
     if (!startTimeMs) return null;
@@ -91,6 +75,7 @@ export default function LiveSports() {
 
   return (
     <div className="live-sports-container">
+      <N64Defs />
       <div className="live-sports-header">
         <h2 className="section-title">Live Sports Coverage</h2>
         <div className="search-bar-wrapper">
@@ -110,7 +95,9 @@ export default function LiveSports() {
             key={sport}
             className={`sport-tab-btn ${selectedSport === sport ? "active" : ""}`}
             onClick={() => setSelectedSport(sport)}
+            style={{ display: "flex", alignItems: "center", gap: "6px" }}
           >
+            <N64SportIcon sport={sport} size={16} />
             {sport === "all"
               ? "All Sports"
               : sport === "american-football"
@@ -192,12 +179,7 @@ export default function LiveSports() {
                 {isVs ? (
                   <div className="teams-vs-container">
                     <div className="team-column left-team">
-                      <div
-                        className="team-logo-fallback"
-                        style={{ background: getTeamColor(team1) }}
-                      >
-                        {getTeamInitials(team1)}
-                      </div>
+                      <N64TeamLogo teamName={team1} sport={fixture.sport} size={64} />
                       <span className="team-name">{team1}</span>
                     </div>
 
@@ -206,18 +188,13 @@ export default function LiveSports() {
                     </div>
 
                     <div className="team-column right-team">
-                      <div
-                        className="team-logo-fallback"
-                        style={{ background: getTeamColor(team2) }}
-                      >
-                        {getTeamInitials(team2)}
-                      </div>
+                      <N64TeamLogo teamName={team2} sport={fixture.sport} size={64} />
                       <span className="team-name">{team2}</span>
                     </div>
                   </div>
                 ) : (
                   <div className="single-event-container">
-                    <div className="event-icon">🏆</div>
+                    <N64SportIcon sport={fixture.sport || "all"} size={56} />
                     <h3 className="event-title">{fixture.title}</h3>
                   </div>
                 )}

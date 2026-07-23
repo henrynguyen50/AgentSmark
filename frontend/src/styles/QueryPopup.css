@@ -687,6 +687,8 @@
 
 .trending-card {
   flex: 0 0 14%; /* ~7 cards visible in container width on desktop */
+  min-width: 170px;
+  min-height: 255px;
   aspect-ratio: 2 / 3;
   background-color: #c0c0c0;
   border-top: 0.15rem solid #ffffff;
@@ -804,7 +806,8 @@
 /* Sports card poster container */
 .trending-card-sport-poster {
   width: 100%;
-  aspect-ratio: 2 / 3;
+  height: 100%;
+  min-height: 190px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -813,6 +816,11 @@
   overflow: hidden;
   box-sizing: border-box;
   border-bottom: 0.1rem solid #808080;
+}
+
+.trending-card-sport-poster .n64-matchup-container {
+  transform: scale(0.75);
+  transform-origin: center;
 }
 
 /* VS Matchup Styling */

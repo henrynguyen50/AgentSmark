@@ -314,8 +314,41 @@
             Implements the "The Tables" gaming and streaming view. Features register/login forms connecting to FastAPI auth routes, a lobby showing active sports categories (Basketball, Football/Soccer, Soccer, NFL, Baseball) and active streaming fixtures, a Game Station split-screen view with embed iframe player and player props (Over/Under picks) loaded directly in the "Wanna Bet?" panel, a player props search/filtering bar to search by player, team, or prop, a parlay slip builder for placing 2-5 leg parlays, and active parlay trackers with real-time simulated progress feeds and floating alert cards that update when props increase or settle. Now features a multi-channel stream/channel selector tab system in the Game Station to choose from multiple live broadcast links, active durations calculated dynamically (120 minutes for Soccer/Football, 180 minutes for NFL/American Football), customized tab category filters showing soccer/football matches on both "Soccer" and "Football" tabs while "NFL" displays "american-football" fixtures, and highlights pitching strikeouts / strikeouts props with a premium gold/amber theme (distinct badge, border, and glow effects) to make them prominent in the props selection tab, parlay slip, and placed parlays history list.
           </p>
         </div>
-      </div>
-    </section>
+
+        <!-- src/components/N64SportsIcons.tsx -->
+        <div class="card">
+          <h3>
+            <a href="./src/components/N64SportsIcons.tsx">src/components/N64SportsIcons.tsx</a>
+            <span class="badge badge-react">Retro Assets Component</span>
+          </h3>
+          <p>
+            Implements a zero-dependency, self-contained SVG graphic and team badge asset system. Houses the N64 visual filter definitions (scanlines, drop shadows, 3D metallic gold bevels) and includes a comprehensive team logo and category icon registry for NFL (32 teams), NBA (30 teams), MLB (30 teams), Soccer (top global clubs), F1 Constructors, and Combat Sports (UFC, WWE, AEW). Provides matching/normalization helpers to dynamically map API names to custom vintage console-styled polygonal and pixelated SVGs.
+          </p>
+        </div>
+
+        <!-- src/components/VisitorCounter.tsx -->
+        <div class="card">
+          <h3>
+            <a href="./src/components/VisitorCounter.tsx">src/components/VisitorCounter.tsx</a>
+            <span class="badge badge-react">Visitor Counter Component</span>
+          </h3>
+          <p>
+            Renders a 90s digital style hit counter displaying the visitor's hit count with a 6-digit glowing green/yellow LED digital readout. Manages the display and provides a debug hook control button (Set to 999) for quick testing of milestone achievements. When the hit count hits 1000 or any multiple of 1000, it triggers a flashing milestone banner prompting the user to claim their prize.
+          </p>
+        </div>
+
+        <!-- src/components/PrizeModal.tsx -->
+        <div class="card">
+          <h3>
+            <a href="./src/components/PrizeModal.tsx">src/components/PrizeModal.tsx</a>
+            <span class="badge badge-react">Prize Modal Component</span>
+          </h3>
+          <p>
+            A retro Windows XP popup chrome component that displays a celebratory prize award dialog when the user hits the 1000th visitor milestone. Features classic title bar chrome, blinking congratulatory texts, prize details for winning SFO Bucks and VIP Access, and an interactive claim button that triggers an alert and closes the modal.
+          </p>
+        </div>
+       </div>
+     </section>
 
     <!-- Section 3: Style Sheets & Layout -->
     <section class="section">
@@ -345,9 +378,13 @@
           <strong><a href="./src/styles/Tables.css">src/styles/Tables.css</a>:</strong> Presentation rules for the Tables component. 
           Configures the Windows XP Log On Security Dialog box layout, Excel-like spreadsheet tables with solid 1px borders, bold text, 
           grey headers (#ECE9D8), neo-green LCD balance displays, beveled props selection banners, highlighted strikeouts props with yellow sticky note styling, retro search input styles, and square badge tags.
+           grey headers (#ECE9D8), neo-green LCD balance displays, beveled props selection banners, highlighted strikeouts props with yellow sticky note styling, retro search input styles, and square badge tags.
+         </li>
+        <li>
+          <strong><a href="./src/styles/N64SportsIcons.css">src/styles/N64SportsIcons.css</a>:</strong> Presentation rules for the Nintendo 64 Retro Sports graphics. Establishes the pixelated border layout shadow, beveled inset outlines, hover animations (scaling and rotation), and flexbox alignments for sport chips and matchup VS badges.
         </li>
-      </ul>
-    </section>
+       </ul>
+     </section>
 
     <!-- Section 4: Configuration Details -->
     <section class="section">

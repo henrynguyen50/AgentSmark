@@ -275,17 +275,17 @@
 /* Lobby Fixtures Grid */
 .fixtures-lobby-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 10px;
 }
 
 .fixture-lobby-card {
   background-color: #ece9d8;
   border: 2px outset #ffffff;
-  padding: 12px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .card-header-sport {
@@ -434,7 +434,7 @@
 .props-filter-banner {
   background-color: #ece9d8;
   border: 2px inset #ffffff;
-  padding: 8px 12px;
+  padding: 12px 16px;
   margin-bottom: 12px;
   display: flex;
   justify-content: space-between;

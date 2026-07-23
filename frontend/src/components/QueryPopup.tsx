@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react"
 import "../styles/QueryPopup.css"
+import { N64Defs, N64TeamLogo, N64SportIcon, N64MatchupBadge } from "./N64SportsIcons"
+import "../styles/N64SportsIcons.css"
 
 declare global {
   interface Window {
@@ -58,17 +60,6 @@ export default function QueryPopup() {
     (item) => item.media_type === "sport"
   )
 
-  const getSportEmoji = (sport: string = "") => {
-    const s = sport.toLowerCase()
-    if (s.includes("basket") || s === "nba") return "🏀"
-    if (s.includes("soccer") || s.includes("football") || s === "laliga" || s === "premier league" || s === "champions league") return "⚽"
-    if (s.includes("nfl") || s.includes("gridiron") || s.includes("american football")) return "🏈"
-    if (s.includes("baseball") || s === "mlb") return "⚾"
-    if (s.includes("fight") || s.includes("ufc") || s.includes("mma") || s.includes("boxing")) return "🥊"
-    if (s.includes("tennis")) return "🎾"
-    if (s.includes("golf")) return "⛳"
-    return "🏆"
-  }
 
   useEffect(() => {
     let active = true
@@ -203,14 +194,6 @@ export default function QueryPopup() {
   }
 
 
-  const getTeamInitials = (name: string) => {
-    const clean = name.replace(/[^a-zA-Z0-9\s]/g, "").trim()
-    const words = clean.split(/\s+/)
-    if (words.length >= 2) {
-      return (words[0][0] + words[1][0]).toUpperCase()
-    }
-    return clean.substring(0, 2).toUpperCase()
-  }
 
   const getTeamColor = (name: string) => {
     let hash = 0
@@ -226,34 +209,24 @@ export default function QueryPopup() {
     const isVs = parts.length >= 2
     const team1 = parts[0]?.trim()
     const team2 = parts[1]?.trim()
-    const emoji = getSportEmoji(item.sport || "")
     
     if (isVs) {
       return (
         <div 
           className="trending-card-sport-poster vs-matchup"
-          style={{ background: getTeamColor(item.title) }}
+          style={{ background: getTeamColor(item.title), display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         >
-          <div className="sport-matchup-initials">
-            <span className="team-initial" style={{ background: getTeamColor(team1) }}>
-              {getTeamInitials(team1)}
-            </span>
-            <span className="vs-divider">VS</span>
-            <span className="team-initial" style={{ background: getTeamColor(team2) }}>
-              {getTeamInitials(team2)}
-            </span>
-          </div>
-          <span className="sport-icon-float">{emoji}</span>
+          <N64MatchupBadge team1={team1} team2={team2} sport={item.sport} size={72} />
         </div>
       )
     } else {
       return (
         <div 
           className="trending-card-sport-poster single-event"
-          style={{ background: getTeamColor(item.title) }}
+          style={{ background: getTeamColor(item.title), display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center', alignItems: 'center' }}
         >
-          <span className="event-title-initials">{getTeamInitials(item.title)}</span>
-          <span className="sport-icon-float">{emoji}</span>
+          <N64TeamLogo teamName={item.title} sport={item.sport} size={88} />
+          <N64SportIcon sport={item.sport || "all"} size={64} />
         </div>
       )
     }
@@ -261,6 +234,7 @@ export default function QueryPopup() {
 
   return (
     <div className="popup-overlay">
+      <N64Defs />
       <div className="query-flow-container">
         <div className="popup-container">
           <form onSubmit={handleSubmit} className="center-section">
@@ -499,22 +473,18 @@ export default function QueryPopup() {
                       {isVs ? (
                         <div className="sport-card-teams">
                           <div className="sport-card-team">
-                            <div className="sport-card-fallback" style={{ background: getTeamColor(team1) }}>
-                              {getTeamInitials(team1)}
-                            </div>
+                            <N64TeamLogo teamName={team1} size={64} />
                             <span className="sport-card-teamname">{team1}</span>
                           </div>
                           <span className="sport-card-vs">VS</span>
                           <div className="sport-card-team">
-                            <div className="sport-card-fallback" style={{ background: getTeamColor(team2) }}>
-                              {getTeamInitials(team2)}
-                            </div>
+                            <N64TeamLogo teamName={team2} size={64} />
                             <span className="sport-card-teamname">{team2}</span>
                           </div>
                         </div>
                       ) : (
                         <div className="sport-card-single">
-                          <span className="sport-single-icon">⚽</span>
+                          <N64SportIcon sport="all" size={32} />
                           <span className="sport-single-title">{result.title}</span>
                         </div>
                       )}

@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "../styles/Tables.css";
+import { N64Defs, N64TeamLogo, N64SportIcon, N64MatchupBadge } from "./N64SportsIcons";
+import "../styles/N64SportsIcons.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://agent-smark-backend.onrender.com";
 
@@ -491,6 +493,7 @@ export default function Tables() {
 
   return (
     <div className="tables-container">
+      <N64Defs />
       {/* Live notification layer */}
       <div className="notification-toast-container">
         {notifications.map((n) => (
@@ -753,7 +756,9 @@ export default function Tables() {
                           key={sport}
                           className={`sport-tab-btn ${selectedSport === sport ? "active" : ""}`}
                           onClick={() => setSelectedSport(sport)}
+                          style={{ display: "flex", alignItems: "center", gap: "6px" }}
                         >
+                          <N64SportIcon sport={sport} size={18} />
                           {sport === "american-football"
                             ? "NFL"
                             : sport.charAt(0).toUpperCase() + sport.slice(1)}
@@ -784,13 +789,29 @@ export default function Tables() {
                       <div className="fixtures-lobby-grid">
                         {filteredFixtures.filter(isFixtureActiveStream).map((fixture, idx) => {
                           const status = getFixtureStatus(fixture.start_time, fixture.sport);
+                          const parts = fixture.title.split(/\s+vs\.?\s+/i);
+                          const isVs = parts.length >= 2;
+                          const team1 = parts[0]?.trim();
+                          const team2 = parts[1]?.trim();
                           return (
-                            <div key={idx} className="fixture-lobby-card">
-                              <div className="card-header-sport">
-                                <span>{fixture.sport.toUpperCase()}</span>
-                                <span className={`status-badge-val ${status.cls}`}>{status.label}</span>
+                            <div key={idx} className="fixture-lobby-card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                              <div>
+                                <div className="card-header-sport" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                  <span>{fixture.sport.toUpperCase()}</span>
+                                  <span className={`status-badge-val ${status.cls}`}>{status.label}</span>
+                                </div>
+                                <div style={{ display: "flex", justifyContent: "center", margin: "10px 0" }}>
+                                  {isVs ? (
+                                    <N64MatchupBadge team1={team1} team2={team2} sport={fixture.sport} size={60} />
+                                  ) : (
+                                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
+                                      <N64TeamLogo teamName={fixture.title} sport={fixture.sport} size={60} />
+                                      <N64SportIcon sport={fixture.sport || "all"} size={24} />
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="card-fixture-title" style={{ textAlign: "center" }}>{fixture.title}</div>
                               </div>
-                              <div className="card-fixture-title">{fixture.title}</div>
                               <button className="watch-bet-action" onClick={() => setSelectedFixture(fixture)}>
                                 Watch Stream
                               </button>
@@ -816,7 +837,9 @@ export default function Tables() {
                           setSelectedSport(sport);
                           setSelectedPropsFixture(null);
                         }}
+                        style={{ display: "flex", alignItems: "center", gap: "6px" }}
                       >
+                        <N64SportIcon sport={sport} size={18} />
                         {sport === "american-football"
                           ? "NFL"
                           : sport.charAt(0).toUpperCase() + sport.slice(1)}
@@ -843,19 +866,37 @@ export default function Tables() {
                     )}
                   </div>
 
-                  {selectedPropsFixture && (
-                    <div className="props-filter-banner">
-                      <span className="props-filter-text">
-                        Showing props for <strong>{selectedPropsFixture.title}</strong>.
-                      </span>
-                      <button
-                        onClick={() => setSelectedPropsFixture(null)}
-                        className="props-filter-btn"
-                      >
-                        Show All Games
-                      </button>
-                    </div>
-                  )}
+                  {selectedPropsFixture && (() => {
+                    const parts = selectedPropsFixture.title.split(/\s+vs\.?\s+/i);
+                    const isVs = parts.length >= 2;
+                    const team1 = parts[0]?.trim();
+                    const team2 = parts[1]?.trim();
+                    return (
+                      <div className="props-filter-banner" style={{ display: "flex", flexDirection: "column", gap: "10px", alignItems: "center", padding: "12px" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
+                          <span className="props-filter-text" style={{ flex: 1 }}>
+                            Showing props for <strong>{selectedPropsFixture.title}</strong>.
+                          </span>
+                          <button
+                            onClick={() => setSelectedPropsFixture(null)}
+                            className="props-filter-btn"
+                          >
+                            Show All Games
+                          </button>
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "center", width: "100%", margin: "4px 0" }}>
+                          {isVs ? (
+                            <N64MatchupBadge team1={team1} team2={team2} sport={selectedPropsFixture.sport} size={64} />
+                          ) : (
+                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                              <N64TeamLogo teamName={selectedPropsFixture.title} sport={selectedPropsFixture.sport} size={64} />
+                              <N64SportIcon sport={selectedPropsFixture.sport || "all"} size={28} />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })()}
 
                   {loading ? (
                     <div className="retro-loader-container">
